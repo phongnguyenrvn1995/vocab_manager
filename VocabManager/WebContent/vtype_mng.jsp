@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page errorPage="error_page.jsp"%>
 <!DOCTYPE html>
@@ -18,17 +17,19 @@
 		del_form['method'] = 'POST';
 		del_form['_action'].value = 'delete';
 		del_form['v_id'].value = id;
+		del_form['page'].value = ${page};
 	}
 </script>
 </head>
 <body>
 	<c:set var="list" value="${requestScope.list }" />
 	<c:set var="action_status" value="${requestScope.action_status }" />
+	<c:set var="is_successful" value="${requestScope.is_successful }" />
 	<c:set var="total_page" value="${requestScope.total_page }"/>
 	<c:set var="page" value="${(empty requestScope.page) ? 1 : requestScope.page}"/>
 	
 	<c:if test="${action_status != null }">
-		<div class="w3-panel w3-green w3-display-container">
+		<div class="w3-panel ${(is_successful) ? 'w3-green' : 'w3-red'}  w3-display-container">
 			<span onclick="this.parentElement.style.display='none'"
 				class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>
@@ -62,14 +63,16 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="VTypeController?page=1" class="w3-button">«</a>
-					<c:forEach var="idx" begin="1" end="${total_page }">
+					<a href="VTypeController?page=1" class="w3-button">Â«</a>
+					<c:forEach 	var="idx" 
+								begin="${(page - 2) < 0 ? 1 : (page - 2)}"
+								end="${(page + 2) > total_page ? total_page : (page + 2)}">
 						<a href="VTypeController?page=${idx }" 
 								class="w3-button ${(idx == page) ? 'w3-green' : ''} ">
 							<c:out value="${idx }"/>
 						</a>
 					</c:forEach>
-					<a href="VTypeController?page=${total_page }" class="w3-button">»</a>
+					<a href="VTypeController?page=${total_page }" class="w3-button">Â»</a>
 				</div>
 			</div>
 		</div>
@@ -90,6 +93,7 @@
 				<form id="del_form">
 					<input name="_action">
 					<input name="v_id">
+					<input name="page">
 				</form>
 			</div>
 			<footer class="w3-container w3-padding-16">
@@ -114,7 +118,7 @@
 		<label class="w3-text-teal"><b>First Name</b></label>
 		<div class="w3-row">
 			<input name="vocab_type_desc"
-				class="w3-input w3-border w3-light-grey w3-half" type="text">
+				class="w3-input w3-border w3-light-grey w3-half" type="text" maxlength=20>
 			<input name="_action" value="save" type="hidden">
 		</div>
 		<button class="w3-btn w3-blue-grey w3-margin-top">Commit</button>

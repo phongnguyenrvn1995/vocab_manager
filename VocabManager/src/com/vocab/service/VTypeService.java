@@ -17,7 +17,7 @@ public class VTypeService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
 		VocabType v = new VocabType();
-		v.setVocab_type_name("Noun");
+		v.setVocab_type_name("giấc mơ thần tiên");
 		save(v);
 	}
 
@@ -42,6 +42,18 @@ public class VTypeService {
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
 		String msg = "vocab_type_name=" + vocabType.getVocab_type_name();
 		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+
+	public static Response delete(int id){
+		String url = APIConsts.BASE_URL + APIConsts.API_VTYPE_DELETE + id;
+		String method = HttpMethod.DELETE;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String json = HttpUtils.request(url, method, contentType, null);
 		System.out.println(json);
 				
 		Response response = new Gson().fromJson(json, Response.class);

@@ -1,7 +1,8 @@
 package com.vocab.service;
 
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -22,9 +23,13 @@ public class HttpUtils {
 			// Send request
 			if (urlParameters != null && !urlParameters.isEmpty()) {
 				connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.getBytes().length));
-				DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-				wr.writeBytes(urlParameters);
-				wr.close();
+//				DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+//				wr.writeBytes(urlParameters);
+//				wr.close();
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+				bw.write(urlParameters);
+				bw.flush();
+				bw.close();
 			}
 
 			// Get Response

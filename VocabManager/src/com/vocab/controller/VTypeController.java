@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.vocab.consts.ResponseConst;
 import com.vocab.model.Response;
 import com.vocab.model.VocabType;
 import com.vocab.service.VTypeService;
@@ -34,6 +35,7 @@ public class VTypeController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		gotoVTypeMng(request, response);
 	}
 
@@ -41,6 +43,7 @@ public class VTypeController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		String _action = (String) request.getParameter("_action");
 		System.out.println(_action);
 		switch(_action) {
@@ -48,26 +51,45 @@ public class VTypeController extends HttpServlet {
 			save(request, response);
 			break;
 		case "delete":
-			System.out.println(request.getParameter("v_id"));
-			//save(request, response);
+			delete(request, response);
 			break;
 		}
 	}
-	
+
 	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String vtype = request.getParameter("vocab_type_desc");
-		System.out.println(vtype);
+		System.out.println("vocab_type_desc = " +vtype);
 		String actionStatus;
+		boolean isScf = false;
 		if(vtype != null && !vtype.isEmpty()) {
 			VocabType vocabType = new VocabType();
 			vocabType.setVocab_type_name(vtype);
 			Response resp = VTypeService.save(vocabType);
 			actionStatus = resp.getResponse_description();
+			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
 		} else {
 			actionStatus = "Description must be not empty!";
 		}
+		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoVTypeMng(request, response, Integer.MAX_VALUE);
+	}
+
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int v_id = parseToInt(request.getParameter("v_id"), -1 );
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		System.out.println("v_id = " + v_id);
+		System.out.println("pageNo = " + pageNo);
+		
+		String actionStatus;
+		boolean isScf = false;
+		Response resp = VTypeService.delete(v_id);
+		actionStatus = resp.getResponse_description();
+		isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoVTypeMng(request, response, pageNo);
 	}
 	
 
