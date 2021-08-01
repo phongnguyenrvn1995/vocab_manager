@@ -1,10 +1,12 @@
-package com.vocab.service;
+package com.vocab.utils;
 
 import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 
 public class HttpUtils {
 
@@ -23,10 +25,7 @@ public class HttpUtils {
 			// Send request
 			if (urlParameters != null && !urlParameters.isEmpty()) {
 				connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.getBytes().length));
-//				DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-//				wr.writeBytes(urlParameters);
-//				wr.close();
-				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8));
 				bw.write(urlParameters);
 				bw.flush();
 				bw.close();
@@ -42,7 +41,7 @@ public class HttpUtils {
 				resp[offset++] = (byte) bRead;
 			}
 			is.close();
-			return new String(resp);
+			return new String(resp,  StandardCharsets.UTF_8);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

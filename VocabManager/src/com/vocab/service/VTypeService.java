@@ -12,13 +12,15 @@ import com.google.gson.reflect.TypeToken;
 import com.vocab.consts.APIConsts;
 import com.vocab.model.Response;
 import com.vocab.model.VocabType;
+import com.vocab.utils.HttpUtils;
 
 public class VTypeService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
 		VocabType v = new VocabType();
 		v.setVocab_type_name("giấc mơ thần tiên");
-		save(v);
+//		save(v);
+//		 List<VocabType> l = gets();
 	}
 
 	public static List<VocabType> gets(){

@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vocab.consts.APIConsts;
 import com.vocab.model.Response;
+import com.vocab.utils.HttpUtils;
 
 public class ResponseService {
 	public static void main(String[] ar) {

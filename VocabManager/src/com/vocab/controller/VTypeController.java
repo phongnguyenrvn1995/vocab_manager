@@ -35,7 +35,6 @@ public class VTypeController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
 		gotoVTypeMng(request, response);
 	}
 
@@ -43,7 +42,6 @@ public class VTypeController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
 		String _action = (String) request.getParameter("_action");
 		System.out.println(_action);
 		switch(_action) {
@@ -102,7 +100,7 @@ public class VTypeController extends HttpServlet {
 		List<VocabType> filterList = list.stream().skip(
 				pageNo * itemLimited - itemLimited
 				).limit(itemLimited).collect(Collectors.toList());
-		
+		filterList.get(0).setVocab_type_name("Giấc mơ thần tiên");
 		request.setAttribute("list", filterList);
 		request.setAttribute("page", pageNo);
 		request.setAttribute("total_page", total_page);
