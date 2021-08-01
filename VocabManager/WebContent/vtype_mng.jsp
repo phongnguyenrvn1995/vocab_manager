@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <title>Vocab Type Manager</title>
 <script type="text/javascript">
-	function openDel(id, desc) {
+	function openDelModal(id, desc) {
 		document.getElementById('del_modal').style.display='block';
 		document.getElementById('del_desc').innerHTML = desc;
 		var del_form = document.getElementById('del_form');
@@ -18,6 +18,18 @@
 		del_form['_action'].value = 'delete';
 		del_form['v_id'].value = id;
 		del_form['page'].value = ${page};
+	}
+	
+	function openUpdateModal(id, desc) {
+		document.getElementById('update_modal').style.display='block';
+		document.getElementById('update_desc').innerHTML = desc;
+
+		var update_form = document.getElementById('update_form');
+		update_form['action'] = 'VTypeController';
+		update_form['method'] = 'POST';
+		update_form['_action'].value = 'update';
+		update_form['v_id'].value = id;
+		update_form['page'].value = ${page};
 	}
 </script>
 </head>
@@ -52,9 +64,11 @@
 					<td style="vertical-align: middle;"><c:out value="${item.getVocab_type_id() }" /></td>
 					<td style="vertical-align: middle;"><c:out value="${item.getVocab_type_name() }" /></td>
 					<td class="w3-row">
-						<button class="w3-button w3-half w3-light-green">Edit</button>
 						<button 
-							onclick="openDel(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')" 
+							onclick="openUpdateModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')" 
+							class="w3-button w3-half w3-light-green">Edit</button>
+						<button 
+							onclick="openDelModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')" 
 							class="w3-button w3-half w3-red">Delete</button>
 					</td>
 				</tr>
@@ -65,7 +79,7 @@
 				<div class="w3-display-bottomright">
 					<a href="VTypeController?page=1" class="w3-button">«</a>
 					<c:forEach 	var="idx" 
-								begin="${(page - 2) < 0 ? 1 : (page - 2)}"
+								begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 								end="${(page + 2) > total_page ? total_page : (page + 2)}">
 						<a href="VTypeController?page=${idx }" 
 								class="w3-button ${(idx == page) ? 'w3-green' : ''} ">
@@ -102,6 +116,51 @@
 					<div class="w3-half  w3-center">
 						<button onclick="document.getElementById('del_form').submit()" class="w3-button w3-light-grey" style="width: 40%">Yes</button>
 						<button  onclick="document.getElementById('del_modal').style.display='none'" class="w3-button w3-light-grey" style="width: 40%">No</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<div id="update_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('update_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">Update</h2>
+			</header>
+			<form id="update_form" class="w3-container">
+				<div class="w3-row">
+					<div class="w3-margin-top  w3-margin-bottom  w3-rest w3-pale-blue">
+						<h2 class="w3-center">
+							[<span id="update_desc"></span>]
+						</h2>
+					</div>
+				</div>
+				<label class="w3-text-teal"><b>New Description</b></label>
+				<div class="w3-row">
+					<input type="hidden" name="_action"> 
+					<input type="hidden" name="v_id"> 
+					<input type="hidden" name="page">
+					<input name="vocab_type_desc"
+						class="w3-input w3-border w3-light-grey w3-rest" type="text"
+						maxlength=20>
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button
+							onclick="document.getElementById('update_form').submit()"
+							class="w3-button w3-light-grey"
+							style="width: 40%">Update</button>
+						<button
+							onclick="document.getElementById('update_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">Cancel</button>
 					</div>
 					<p class="w3-quarter"></p>
 				</div>

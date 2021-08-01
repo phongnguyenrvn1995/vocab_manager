@@ -51,12 +51,15 @@ public class VTypeController extends HttpServlet {
 		case "delete":
 			delete(request, response);
 			break;
+		case "update":
+			update(request, response);
+			break;
 		}
 	}
 
 	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String vtype = request.getParameter("vocab_type_desc");
-		System.out.println("vocab_type_desc = " +vtype);
+		System.out.println("vocab_type_desc = " + vtype);
 		String actionStatus;
 		boolean isScf = false;
 		if(vtype != null && !vtype.isEmpty()) {
@@ -91,6 +94,33 @@ public class VTypeController extends HttpServlet {
 	}
 	
 
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int v_id = parseToInt(request.getParameter("v_id"), -1 );
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		String vtype = request.getParameter("vocab_type_desc");
+		
+		System.out.println("vocab_type_desc = " + vtype);
+		System.out.println("v_id = " + v_id);
+		System.out.println("pageNo = " + pageNo);
+		
+		String actionStatus;
+		boolean isScf = false;
+		if(vtype != null && !vtype.isEmpty()) {
+			VocabType vocabType = new VocabType();
+			vocabType.setVocab_type_id(v_id);
+			vocabType.setVocab_type_name(vtype);
+			Response resp = VTypeService.update(vocabType);
+			actionStatus = resp.getResponse_description();
+			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+		} else {
+			actionStatus = "Description must be not empty!";
+		}
+		
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoVTypeMng(request, response, pageNo);
+	}
+	
 	private void gotoVTypeMng(HttpServletRequest request, HttpServletResponse response, int ...page) throws ServletException, IOException {		
 		List<VocabType> list = VTypeService.gets();
 		int total_page = (int)Math.ceil((float)list.size() / (float)itemLimited);
@@ -100,7 +130,6 @@ public class VTypeController extends HttpServlet {
 		List<VocabType> filterList = list.stream().skip(
 				pageNo * itemLimited - itemLimited
 				).limit(itemLimited).collect(Collectors.toList());
-		filterList.get(0).setVocab_type_name("Giấc mơ thần tiên");
 		request.setAttribute("list", filterList);
 		request.setAttribute("page", pageNo);
 		request.setAttribute("total_page", total_page);

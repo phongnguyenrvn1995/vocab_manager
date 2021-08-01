@@ -7,4 +7,5 @@ public class APIConsts {
 	public static final String API_VTYPE_GETS = "/VocabRestApi/vocab_api/vocab_type/gets";
 	public static final String API_VTYPE_SAVE = "/VocabRestApi/vocab_api/vocab_type/save";
 	public static final String API_VTYPE_DELETE = "/VocabRestApi/vocab_api/vocab_type/delete/";
+	public static final String API_VTYPE_UPDATE = "/VocabRestApi/vocab_api/vocab_type/update";
 }
