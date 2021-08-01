@@ -19,7 +19,7 @@
 		del_form['v_id'].value = id;
 		del_form['page'].value = ${page};
 	}
-	
+
 	function openUpdateModal(id, desc) {
 		document.getElementById('update_modal').style.display='block';
 		document.getElementById('update_desc').innerHTML = desc;
@@ -30,6 +30,15 @@
 		update_form['_action'].value = 'update';
 		update_form['v_id'].value = id;
 		update_form['page'].value = ${page};
+	}
+
+	function openAddModal() {
+		document.getElementById('add_modal').style.display='block';
+
+		var update_form = document.getElementById('add_form');
+		update_form['action'] = 'VTypeController';
+		update_form['method'] = 'POST';
+		update_form['_action'].value = 'save';
 	}
 </script>
 </head>
@@ -50,7 +59,7 @@
 		</div>
 	</c:if>
 	<div class="w3-container" style="overflow-x: auto;">
-		<h2>All Vocab Type</h2>
+		<h2>ALL VOCAB TYPE</h2>
 
 		<table class="w3-table-all">
 			<tr>
@@ -89,6 +98,12 @@
 					<a href="VTypeController?page=${total_page }" class="w3-button">»</a>
 				</div>
 			</div>
+		</div>
+		<div class="w3-container w3-margin-top">
+  			<button
+  					onclick="openAddModal()" 
+  					class="w3-btn w3-teal">ADD NEW</button>
+  			<a href="VTypeController?_action=main" class="w3-btn w3-teal">BACK</a>
 		</div>
 	</div>
 
@@ -146,7 +161,7 @@
 					<input type="hidden" name="v_id"> 
 					<input type="hidden" name="page">
 					<input name="vocab_type_desc"
-						class="w3-input w3-border w3-light-grey w3-rest" type="text"
+						class="w3-input w3-border w3-light-grey w3-rest w3-margin-top" type="text"
 						maxlength=20>
 				</div>
 			</form>
@@ -167,20 +182,43 @@
 			</footer>
 		</div>
 	</div>
-
-	<form class="w3-container" action="VTypeController" method="post">
-		<div class="w3-row">
-			<div class="w3-margin-top  w3-half w3-pale-blue">
-				<h2>Add a new Type</h2>
-			</div>
+	
+	<div id="add_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('add_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">Add new Type</h2>
+			</header>
+			<form id="add_form" class="w3-container">
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal"><b>Vocab Type Description</b></label>
+				</div>
+				<div class="w3-row">
+					<input type="hidden" name="_action"> 
+					<input name="vocab_type_desc"
+						class="w3-input w3-border w3-light-grey w3-rest w3-margin-top" type="text"
+						maxlength=20>
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button
+							onclick="document.getElementById('add_form').submit()"
+							class="w3-button w3-light-grey"
+							style="width: 40%">ADD</button>
+						<button
+							onclick="document.getElementById('add_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">Cancel</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
 		</div>
-		<label class="w3-text-teal"><b>First Name</b></label>
-		<div class="w3-row">
-			<input name="vocab_type_desc"
-				class="w3-input w3-border w3-light-grey w3-half" type="text" maxlength=20>
-			<input name="_action" value="save" type="hidden">
-		</div>
-		<button class="w3-btn w3-blue-grey w3-margin-top">Commit</button>
-	</form>
+	</div>
 </body>
 </html>

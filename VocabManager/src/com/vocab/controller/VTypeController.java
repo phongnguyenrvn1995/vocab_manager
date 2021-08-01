@@ -35,7 +35,19 @@ public class VTypeController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		gotoVTypeMng(request, response);
+		String _action = (String) request.getParameter("_action");
+		System.out.println(_action);
+		if (_action != null) {
+			switch (_action) {
+			case "main":
+				gotoMain(request, response);
+				break;
+			default:
+				gotoVTypeMng(request, response);
+			}
+		} else {
+			gotoVTypeMng(request, response);
+		}
 	}
 
 	/**
@@ -120,7 +132,7 @@ public class VTypeController extends HttpServlet {
 		request.setAttribute("action_status", actionStatus);
 		gotoVTypeMng(request, response, pageNo);
 	}
-	
+
 	private void gotoVTypeMng(HttpServletRequest request, HttpServletResponse response, int ...page) throws ServletException, IOException {		
 		List<VocabType> list = VTypeService.gets();
 		int total_page = (int)Math.ceil((float)list.size() / (float)itemLimited);
@@ -134,6 +146,10 @@ public class VTypeController extends HttpServlet {
 		request.setAttribute("page", pageNo);
 		request.setAttribute("total_page", total_page);
 		request.getRequestDispatcher("/vtype_mng.jsp").forward(request, response);
+	}
+
+	private void gotoMain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
 	}
 	
 	public static int parseToInt(String stringToParse, int defaultValue) {
