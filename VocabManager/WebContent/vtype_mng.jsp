@@ -87,50 +87,54 @@
 		<h2>
 			<fmt:message key="vtype.header_all_vocab_type" />
 		</h2>
-		<div class="w3-dropdown-click w3-right w3-center">
-			<img alt="vn" onclick="openSelectLang()" 
-						src="${(sessionScope['lang'] == 'vn') ? 'images/vn_img.jpg' : 'images/en_img.jpg' }"
-						class=" w3-button"
-						 style="width: 70px"/>
-			<div id="lang_selector" 
-					class="w3-dropdown-content w3-bar-block w3-border" 
-					style="right:0; min-width: 70px;">
-				<a href="?lang=vn&page=${page }">
-					<img alt="vn" src="images/vn_img.jpg"
-						class=" w3-button"
-						style="width: 70px">
-				</a> 
-				<a href="?lang=en&page=${page }">
-					<img alt="vn" src="images/en_img.jpg"
-						class=" w3-button"
-						style="width: 70px">
-				</a>
+		<div class="w3-row">
+			<div class="w3-dropdown-click w3-right w3-center">
+				<img alt="vn" onclick="openSelectLang()" 
+							src="${(sessionScope['lang'] == 'vn') ? 'images/vn_img.jpg' : 'images/en_img.jpg' }"
+							class=" w3-button"
+							 style="width: 70px"/>
+				<div id="lang_selector" 
+						class="w3-dropdown-content w3-bar-block w3-border" 
+						style="right:0; min-width: 70px;">
+					<a href="?lang=vn&page=${page }">
+						<img alt="vn" src="images/vn_img.jpg"
+							class=" w3-button"
+							style="width: 70px">
+					</a> 
+					<a href="?lang=en&page=${page }">
+						<img alt="vn" src="images/en_img.jpg"
+							class=" w3-button"
+							style="width: 70px">
+					</a>
+				</div>
 			</div>
 		</div>
-		<table class="w3-table-all">
-			<tr>
-				<th><fmt:message key="vtype.field_type_id" /></th>
-				<th><fmt:message key="vtype.field_description" /></th>
-				<th style="width: 20%"><fmt:message key="vtype.field_action" /></th>
-			</tr>
-
-			<c:forEach items="${list }" var="item">
+		<div style="overflow-x:auto;">
+			<table class="w3-table-all">
 				<tr>
-					<td style="vertical-align: middle;"><c:out
-							value="${item.getVocab_type_id() }" /></td>
-					<td style="vertical-align: middle;"><c:out
-							value="${item.getVocab_type_name() }" /></td>
-					<td class="w3-row">
-						<button
-							onclick="openUpdateModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')"
-							class="w3-button w3-half w3-light-green">Edit</button>
-						<button
-							onclick="openDelModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')"
-							class="w3-button w3-half w3-red">Delete</button>
-					</td>
+					<th><fmt:message key="vtype.field_type_id" /></th>
+					<th><fmt:message key="vtype.field_description" /></th>
+					<th style="width: 20%"><fmt:message key="vtype.field_action" /></th>
 				</tr>
-			</c:forEach>
-		</table>
+	
+				<c:forEach items="${list }" var="item">
+					<tr>
+						<td style="vertical-align: middle;"><c:out
+								value="${item.getVocab_type_id() }" /></td>
+						<td style="vertical-align: middle;"><c:out
+								value="${item.getVocab_type_name() }" /></td>
+						<td class="w3-row">
+							<button
+								onclick="openUpdateModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')"
+								class="w3-button w3-half w3-light-green">Edit</button>
+							<button
+								onclick="openDelModal(${item.getVocab_type_id()}, '${item.getVocab_type_name() }')"
+								class="w3-button w3-half w3-red">Delete</button>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
