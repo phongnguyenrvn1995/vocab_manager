@@ -31,6 +31,19 @@ public class StatusController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String _action = (String) request.getParameter("_action");
+		System.out.println(_action);
+		if (_action != null) {
+			switch (_action) {
+			case "main":
+				gotoMain(request, response);
+				break;
+			default:
+				gotoStatusMng(request, response);
+			}
+		} else {
+			gotoStatusMng(request, response);
+		}
 		gotoStatusMng(request, response);
 	}
 
@@ -48,4 +61,7 @@ public class StatusController extends HttpServlet {
 		request.getRequestDispatcher("/status_mng.jsp").forward(request, response);
 	}
 
+	private void gotoMain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
+	}
 }

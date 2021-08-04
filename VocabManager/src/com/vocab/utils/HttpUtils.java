@@ -21,6 +21,8 @@ public class HttpUtils {
 			// connection.setRequestProperty("Content-Language", "en-US");
 			connection.setUseCaches(false);
 			connection.setDoOutput(true);
+			connection.setConnectTimeout(60 * 1000);
+			connection.setReadTimeout(60 * 1000);
 
 			// Send request
 			if (urlParameters != null && !urlParameters.isEmpty()) {
