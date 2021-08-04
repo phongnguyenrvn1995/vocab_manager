@@ -31,7 +31,19 @@ public class ResponseController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		gotoRespMng(request, response);
+		String _action = (String) request.getParameter("_action");
+		System.out.println(_action);
+		if (_action != null) {
+			switch (_action) {
+			case "main":
+				gotoMain(request, response);
+				break;
+			default:
+				gotoRespMng(request, response);
+			}
+		} else {
+			gotoRespMng(request, response);
+		}
 	}
 
 	/**
@@ -46,5 +58,9 @@ public class ResponseController extends HttpServlet {
 		List<Response> list = ResponseService.gets();
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/resp_mng.jsp").forward(request, response);
+	}
+
+	private void gotoMain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
 	}
 }
