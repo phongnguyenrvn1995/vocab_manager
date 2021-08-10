@@ -21,6 +21,13 @@
 <fmt:setLocale value="${sessionScope['lang']}" />
 <fmt:setBundle basename="vtype_msg" />
 
+<c:if test="${sessionScope['search'] == null }">
+	<c:set var="search" scope="session" value="ex" />
+</c:if>
+
+<c:if test="${param.q != null }">
+	<c:set var="search" scope="session" value="${param.q }" />
+</c:if>
 
 <!DOCTYPE html>
 <html>
@@ -70,6 +77,12 @@
 	    x.className = x.className.replace(" w3-show", "");
 	  }
 	}
+	
+	function gotoSearch() {
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		window.location.href = 'VTypeController?&q=' + search_value;
+	}
 </script>
 </head>
 <body>
@@ -87,27 +100,48 @@
 		<h2>
 			<fmt:message key="vtype.header_all_vocab_type" />
 		</h2>
-		<div class="w3-row">
-			<div class="w3-dropdown-click w3-right w3-center">
-				<img alt="vn" onclick="openSelectLang()" 
-							src="${(sessionScope['lang'] == 'vn') ? 'images/vn_img.jpg' : 'images/en_img.jpg' }"
-							class=" w3-button"
-							 style="width: 70px"/>
-				<div id="lang_selector" 
-						class="w3-dropdown-content w3-bar-block w3-border" 
-						style="right:0; min-width: 70px;">
-					<a href="?lang=vn&page=${page }">
-						<img alt="vn" src="images/vn_img.jpg"
-							class=" w3-button"
-							style="width: 70px">
-					</a> 
-					<a href="?lang=en&page=${page }">
-						<img alt="vn" src="images/en_img.jpg"
-							class=" w3-button"
-							style="width: 70px">
-					</a>
+		
+		<div class="w3-row">	
+			<div class="w3-bar w3-row w3-right">
+				<div class="w3-dropdown-click w3-right w3-center">
+					<img alt="vn" onclick="openSelectLang()" 
+								src="${(sessionScope['lang'] == 'vn') ? 'images/vn_img.jpg' : 'images/en_img.jpg' }"
+								class=" w3-button"
+								style="height: 40px"/>
+					<div id="lang_selector" 
+							class="w3-dropdown-content w3-bar-block w3-border" 
+							style="right:0; min-width: 70px;">
+						<a class="w3-button" 
+							style="display: block;"
+							href="?lang=vn&page=${page }">
+							<img alt="vn" src="images/vn_img.jpg"								
+								style="width: 70px; display: block;">
+						</a> 
+						<a class="w3-button"
+							style="display: block;"
+							href="?lang=en&page=${page }">
+							<img alt="vn" src="images/en_img.jpg"
+								style="width: 70px; display: block;">
+						</a>
+					</div>
 				</div>
-			</div>
+				<div class="w3-third w3-right"  style="display: inline; height: 100%;">
+					<div class="w3-row">
+						<div class="w3-col" style="width: 80%">
+							<input id="txt_search" 
+								style="height: 40px;" type="search"
+								value="${sessionScope['search'] }" 
+								class="w3-border w3-input w3-hover-khaki" placeholder="Search..">
+						</div>
+						<div class="w3-col" style="width: 20%;">
+							<a style="height: 40px; width: 100%"
+								onclick="gotoSearch()"
+							  	href="#" class="w3-button w3-green">Go</a>
+						</div>
+					</div>
+				</div>				
+			</div>	
+			
 		</div>
 		<div style="overflow-x:auto;">
 			<table class="w3-table-all">
@@ -138,15 +172,15 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="VTypeController?page=1" class="w3-button">«</a>
+					<a href="VTypeController?page=1&q=${sessionScope['search']}" class="w3-button">«</a>
 					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 						end="${(page + 2) > total_page ? total_page : (page + 2)}">
-						<a href="VTypeController?page=${idx }"
+						<a href="VTypeController?page=${idx }&q=${sessionScope['search']}"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
 						</a>
 					</c:forEach>
-					<a href="VTypeController?page=${total_page }" class="w3-button">»</a>
+					<a href="VTypeController?page=${total_page }&q=${sessionScope['search']}" class="w3-button">»</a>
 				</div>
 			</div>
 		</div>

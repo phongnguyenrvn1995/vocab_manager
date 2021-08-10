@@ -133,18 +133,26 @@ public class VTypeController extends HttpServlet {
 		gotoVTypeMng(request, response, pageNo);
 	}
 
-	private void gotoVTypeMng(HttpServletRequest request, HttpServletResponse response, int ...page) throws ServletException, IOException {		
-		List<VocabType> list = VTypeService.gets();
-		int total_page = (int)Math.ceil((float)list.size() / (float)itemLimited);
-		int pageNo = page.length == 0 ? parseToInt(request.getParameter("page"), 1) : page[0];
-		pageNo = pageNo > total_page ? total_page : pageNo;
-		
-		List<VocabType> filterList = list.stream().skip(
-				pageNo * itemLimited - itemLimited
-				).limit(itemLimited).collect(Collectors.toList());
-		request.setAttribute("list", filterList);
-		request.setAttribute("page", pageNo);
-		request.setAttribute("total_page", total_page);
+	private void gotoVTypeMng(HttpServletRequest request, HttpServletResponse response, int ...page) throws ServletException, IOException {
+		String q = request.getParameter("q");
+		q = q == null ? "" : q;
+		List<VocabType> list = VTypeService.gets(q);
+		if(list != null) {
+			int total_page = (int)Math.ceil((float)list.size() / (float)itemLimited);
+			int pageNo = page.length == 0 ? parseToInt(request.getParameter("page"), 1) : page[0];
+			pageNo = pageNo > total_page ? total_page : pageNo;
+			
+			int numPage2Skip = pageNo * itemLimited - itemLimited;
+			numPage2Skip = numPage2Skip >= 0 ? numPage2Skip : 0;
+			
+			
+			List<VocabType> filterList = list.stream().skip(
+					numPage2Skip
+					).limit(itemLimited).collect(Collectors.toList());
+			request.setAttribute("list", filterList);
+			request.setAttribute("page", pageNo);
+			request.setAttribute("total_page", total_page);
+		}
 		request.getRequestDispatcher("/vtype_mng.jsp").forward(request, response);
 	}
 

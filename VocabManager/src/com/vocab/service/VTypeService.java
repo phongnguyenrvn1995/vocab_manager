@@ -1,6 +1,8 @@
 package com.vocab.service;
 
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +19,18 @@ import com.vocab.utils.HttpUtils;
 public class VTypeService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-		VocabType v = new VocabType();
-		v.setVocab_type_id(4);
-		v.setVocab_type_name("giấc mơ thần tiên");
-		update(v);
-//		save(v);
-//		 List<VocabType> l = gets();
+//		VocabType v = new VocabType();
+//		v.setVocab_type_id(4);
+//		v.setVocab_type_name("giấc mơ thần tiên");
+////		update(v);
+////		save(v);
+//		 List<VocabType> l = gets("giấc");
 	}
 
-	public static List<VocabType> gets(){
-		String url = APIConsts.BASE_URL + APIConsts.API_VTYPE_GETS;
+	public static List<VocabType> gets(String q){
+		q = URLEncoder.encode(q, StandardCharsets.UTF_8);
+		String url = APIConsts.BASE_URL + APIConsts.API_VTYPE_GETS + 
+						"?" + APIConsts.KEY_SEARCH_STR + q;
 		String method = HttpMethod.GET;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
 		String msg = "";
