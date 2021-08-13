@@ -9,7 +9,7 @@
 <meta charset="ISO-8859-1">
 <script type="text/javascript">
 	function gotoCourseMng() {
-		window.location.href = "MainController?id=course";
+		window.location.href = "CourseController";
 	}
 	
 	function gotoLessonMng() {

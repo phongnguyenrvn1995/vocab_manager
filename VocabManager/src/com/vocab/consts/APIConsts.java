@@ -10,5 +10,9 @@ public class APIConsts {
 	public static final String API_VTYPE_UPDATE = "/VocabRestApi/vocab_api/vocab_type/update";
 	
 
+	public static final String API_COURSE_GETS = "/VocabRestApi/vocab_api/course/gets";
+	public static final String API_COURSE_SAVE = "/VocabRestApi/vocab_api/course/save";
+	
+
 	public static final String KEY_SEARCH_STR = "searchStr=";
 }
