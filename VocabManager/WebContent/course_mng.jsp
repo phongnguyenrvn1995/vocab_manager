@@ -6,6 +6,10 @@
 
 
 <c:set var="list" value="${requestScope.list }" />
+<c:set var="action_status" value="${requestScope.action_status }" />
+<c:set var="is_successful" value="${requestScope.is_successful }" />
+<c:set var="total_page" value="${requestScope.total_page }" />
+<c:set var="page" value="${(empty requestScope.page) ? 1 : requestScope.page}" />
 <c:set var="statuses" value="${requestScope.statuses }" />
 <c:if test="${sessionScope['lang'] == null }">
 	<c:set var="lang" value="en" scope="session" />
@@ -43,6 +47,7 @@
 		update_form['action'] = 'CourseController';
 		update_form['method'] = 'POST';
 		update_form['_action'].value = 'save';
+		update_form['q'].value = '';
 	}
 	
 	function openSelectLang() {
@@ -91,13 +96,13 @@
 							style="right:0; min-width: 70px;">
 						<a class="w3-button" 
 							style="display: block;"
-							href="?lang=vn&page=${page }">
+							href="?lang=vn&page=${page }&q=${sessionScope['search_course']}">
 							<img alt="vn" src="images/vn_img.jpg"								
 								style="width: 70px; display: block;">
 						</a> 
 						<a class="w3-button"
 							style="display: block;"
-							href="?lang=en&page=${page }">
+							href="?lang=en&page=${page }&q=${sessionScope['search_course']}">
 							<img alt="vn" src="images/en_img.jpg"
 								style="width: 70px; display: block;">
 						</a>
@@ -162,6 +167,22 @@
 			</table>
 		</div>
 		
+		<div>
+			<div class="w3-display-container" style="height: 50px;">
+				<div class="w3-display-bottomright">
+					<a href="?page=1&q=${sessionScope['search_course']}" class="w3-button">«</a>
+					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
+						end="${(page + 2) > total_page ? total_page : (page + 2)}">
+						<a href="?page=${idx }&q=${sessionScope['search_course']}"
+							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
+								value="${idx }" />
+						</a>
+					</c:forEach>
+					<a href="?page=${total_page }&q=${sessionScope['search_course']}" class="w3-button">»</a>
+				</div>
+			</div>
+		</div>
+		
 		<div class="w3-container w3-margin-top">
 			<button onclick="openAddModal()" class="w3-btn w3-teal">
 				<fmt:message key="course.btn_add_new" />
@@ -184,6 +205,7 @@
 			</header>
 			<form id="add_form" class="w3-container">
 				<input type="hidden" name="_action"> 
+				<input type="hidden" name="q"> 
 				<div class="w3-row w3-margin-top">
 					<label class="w3-text-teal">
 						<b><fmt:message	key="course.field_course_name" /></b>

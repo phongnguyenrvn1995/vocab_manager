@@ -11,6 +11,7 @@ public class APIConsts {
 	
 
 	public static final String API_COURSE_GETS = "/VocabRestApi/vocab_api/course/gets";
+	public static final String API_COURSE_GETS_COUNT = "/VocabRestApi/vocab_api/course/gets_count";
 	public static final String API_COURSE_SAVE = "/VocabRestApi/vocab_api/course/save";
 	
 

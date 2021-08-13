@@ -24,6 +24,7 @@ import com.vocab.service.StatusService;
 @WebServlet("/CourseController")
 public class CourseController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int itemLimited = 5;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -70,13 +71,25 @@ public class CourseController extends HttpServlet {
 		}
 	}
 
-	private void gotoCourseMng(HttpServletRequest request, HttpServletResponse response)
+	private void gotoCourseMng(HttpServletRequest request, HttpServletResponse response, int ...page)
 			throws ServletException, IOException {
 		String q = request.getParameter("q");
 		q = q == null ? "" : q;
-		List<Course> list = CourseService.gets(q);
+		int countItems = CourseService.getsCount(q);
 		List<Status> statuses = StatusService.gets();
-		request.setAttribute("list", list);
+		if(countItems != 0) {
+			int total_page = (int)Math.ceil((float)countItems / (float)itemLimited);
+			int pageNo = page.length == 0 ? parseToInt(request.getParameter("page"), 1) : page[0];
+			pageNo = pageNo > total_page ? total_page : pageNo;
+			
+			int offset = pageNo * itemLimited - itemLimited;
+			offset = offset >= 0 ? offset : 0;
+			
+			List<Course> list = CourseService.gets(q, itemLimited, offset);
+			request.setAttribute("list", list);
+			request.setAttribute("page", pageNo);
+			request.setAttribute("total_page", total_page);
+		}
 		request.setAttribute("statuses", statuses);
 		request.getRequestDispatcher("/course_mng.jsp").forward(request, response);
 	}
@@ -121,7 +134,14 @@ public class CourseController extends HttpServlet {
 		}
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
-		gotoCourseMng(request, response);
+		gotoCourseMng(request, response, Integer.MAX_VALUE);
 	}
 
+	public static int parseToInt(String stringToParse, int defaultValue) {
+	    try {
+	       return Integer.parseInt(stringToParse);
+	    } catch(NumberFormatException ex) {
+	       return defaultValue; //Use default value if parsing failed
+	    }
+	}
 }

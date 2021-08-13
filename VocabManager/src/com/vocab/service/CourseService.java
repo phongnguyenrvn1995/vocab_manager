@@ -17,7 +17,21 @@ import com.vocab.utils.HttpUtils;
 public class CourseService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
+		System.out.println(getsCount("name"));
 	}
+	
+	public static int getsCount(String q){
+		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_GETS_COUNT;
+		url += "?" + APIConsts.KEY_SEARCH_STR + q;
+		
+		String method = HttpMethod.GET;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "";
+		String count = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(count);
+		return Integer.parseInt(count);
+	}
+
 	
 	public static List<Course> gets(String q, int ...limitAndOffset){
 		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_GETS;
