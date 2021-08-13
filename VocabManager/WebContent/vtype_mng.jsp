@@ -21,12 +21,12 @@
 <fmt:setLocale value="${sessionScope['lang']}" />
 <fmt:setBundle basename="vtype_msg" />
 
-<c:if test="${sessionScope['search'] == null }">
-	<c:set var="search" scope="session" value="ex" />
+<c:if test="${sessionScope['search_vtype'] == null }">
+	<c:set var="search_vtype" scope="session" value="ex" />
 </c:if>
 
 <c:if test="${param.q != null }">
-	<c:set var="search" scope="session" value="${param.q }" />
+	<c:set var="search_vtype" scope="session" value="${param.q }" />
 </c:if>
 
 <!DOCTYPE html>
@@ -67,6 +67,7 @@
 		update_form['action'] = 'VTypeController';
 		update_form['method'] = 'POST';
 		update_form['_action'].value = 'save';
+		update_form['q'].value = '';
 	}
 	
 	function openSelectLang() {
@@ -113,13 +114,13 @@
 							style="right:0; min-width: 70px;">
 						<a class="w3-button" 
 							style="display: block;"
-							href="?lang=vn&page=${page }">
+							href="?lang=vn&page=${page }&q=${sessionScope['search_vtype']}">
 							<img alt="vn" src="images/vn_img.jpg"								
 								style="width: 70px; display: block;">
 						</a> 
 						<a class="w3-button"
 							style="display: block;"
-							href="?lang=en&page=${page }">
+							href="?lang=en&page=${page }&q=${sessionScope['search_vtype']}">
 							<img alt="vn" src="images/en_img.jpg"
 								style="width: 70px; display: block;">
 						</a>
@@ -130,7 +131,7 @@
 						<div class="w3-col" style="width: 80%">
 							<input id="txt_search" 
 								style="height: 40px;" type="search"
-								value="${sessionScope['search'] }" 
+								value="${sessionScope['search_vtype'] }" 
 								class="w3-border w3-input w3-hover-khaki" placeholder="Search..">
 						</div>
 						<div class="w3-col" style="width: 20%;">
@@ -172,15 +173,15 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="VTypeController?page=1&q=${sessionScope['search']}" class="w3-button">«</a>
+					<a href="?page=1&q=${sessionScope['search_vtype']}" class="w3-button">«</a>
 					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 						end="${(page + 2) > total_page ? total_page : (page + 2)}">
-						<a href="VTypeController?page=${idx }&q=${sessionScope['search']}"
+						<a href="?page=${idx }&q=${sessionScope['search_vtype']}"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
 						</a>
 					</c:forEach>
-					<a href="VTypeController?page=${total_page }&q=${sessionScope['search']}" class="w3-button">»</a>
+					<a href="?page=${total_page }&q=${sessionScope['search_vtype']}" class="w3-button">»</a>
 				</div>
 			</div>
 		</div>
@@ -297,13 +298,15 @@
 					<fmt:message key="vtype.header_add_new_type" />
 				</h2>
 			</header>
-			<form id="add_form" class="w3-container">
+			<form id="add_form" class="w3-container"> 
+				<input type="hidden" name="_action">
+				<input type="hidden" name="q"> 
 				<div class="w3-row w3-margin-top">
 					<label class="w3-text-teal"><b><fmt:message
 								key="vtype.field_description" /></b></label>
 				</div>
-				<div class="w3-row">
-					<input type="hidden" name="_action"> <input
+				<div class="w3-row"> 
+					<input
 						name="vocab_type_desc"
 						class="w3-input w3-border w3-light-grey w3-rest w3-margin-top"
 						type="text" maxlength=20>
