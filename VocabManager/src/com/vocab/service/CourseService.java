@@ -53,13 +53,33 @@ public class CourseService {
 		List<Course> list = new Gson().fromJson(json, listType);
 		return list;
 	}
-	
+
 
 	public static Response save(Course course){
 		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_SAVE;
 		String method = HttpMethod.PUT;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
 		String msg = "course_name=" + course.getCourse_name() +
+				"&course_description=" + course.getCourse_description() +
+				"&course_date_creat=" + course.getCourse_date_creat() +
+				"&course_status=" + course.getCourse_status();
+		
+		
+		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+
+
+	public static Response update(Course course){
+		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_UPDATE;
+		String method = HttpMethod.POST;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "course_id=" + course.getCourse_id() +
+				"&course_name=" + course.getCourse_name() +
 				"&course_description=" + course.getCourse_description() +
 				"&course_date_creat=" + course.getCourse_date_creat() +
 				"&course_status=" + course.getCourse_status();

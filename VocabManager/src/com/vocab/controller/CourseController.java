@@ -68,6 +68,9 @@ public class CourseController extends HttpServlet {
 		case "save":
 			save(request, response);
 			break;
+		case "update":
+			update(request, response);
+			break;
 		}
 	}
 
@@ -135,6 +138,49 @@ public class CourseController extends HttpServlet {
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoCourseMng(request, response, Integer.MAX_VALUE);
+	}
+	
+
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String course_id = request.getParameter("course_id");
+		String course_name = request.getParameter("course_name");
+		String course_desc = request.getParameter("course_desc");
+		String course_date = request.getParameter("course_date");
+		String course_status = request.getParameter("course_status");
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		System.out.println(course_id);
+		System.out.println(course_name);
+		System.out.println(course_desc);
+		System.out.println(course_date);
+		System.out.println(course_status);
+		System.out.println(pageNo);
+
+		String actionStatus = "";
+		boolean isScf = false;
+		if (course_name != null && !course_name.isEmpty() && course_desc != null && !course_desc.isEmpty()
+				&& course_status != null && !course_status.isEmpty()) {
+
+			Course course = new Course();
+			course.setCourse_id(Integer.parseInt(course_id));
+			course.setCourse_name(course_name);
+			course.setCourse_description(course_desc);
+			course.setCourse_date_creat(course_date);
+			course.setCourse_status(Integer.parseInt(course_status));
+
+			Response resp = CourseService.update(course);
+			actionStatus = resp.getResponse_description();
+			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+		} else {
+			if (course_name == null || course_name.isEmpty())
+				actionStatus = "Course name must be not empty!";
+			else if (course_desc == null || course_desc.isEmpty())
+				actionStatus = "Course desc must be not empty!";
+			else if (course_status == null || course_status.isEmpty())
+				actionStatus = "Course status must be not empty!";
+		}
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoCourseMng(request, response, pageNo);
 	}
 
 	public static int parseToInt(String stringToParse, int defaultValue) {

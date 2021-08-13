@@ -41,22 +41,40 @@
 <script type="text/javascript">	
 
 	function openAddModal() {
-		document.getElementById('add_modal').style.display='block';
-	
+		document.getElementById('add_modal').style.display = 'block';
+
 		var update_form = document.getElementById('add_form');
 		update_form['action'] = 'CourseController';
 		update_form['method'] = 'POST';
 		update_form['_action'].value = 'save';
 		update_form['q'].value = '';
 	}
-	
+
+	function openUpdateModal(id, name, desc, date, status) {
+		document.getElementById('update_modal').style.display = 'block';
+
+		var update_form = document.getElementById('update_form');
+		update_form['action'] = 'CourseController';
+		update_form['method'] = 'POST';
+		update_form['page'].value = ${page };
+		update_form['_action'].value = 'update';
+		update_form['q'].value = '';
+
+		update_form['course_id'].value = id;
+		update_form['course_name'].value = name;
+		update_form['course_desc'].value = desc;
+		update_form['course_status'].value = status;/**/
+		update_form['course_date'].value = date;
+		
+	}
+
 	function openSelectLang() {
-	  var x = document.getElementById("lang_selector");
-	  if (x.className.indexOf("w3-show") == -1) {
-	    x.className += " w3-show";
-	  } else { 
-	    x.className = x.className.replace(" w3-show", "");
-	  }
+		var x = document.getElementById("lang_selector");
+		if (x.className.indexOf("w3-show") == -1) {
+			x.className += " w3-show";
+		} else {
+			x.className = x.className.replace(" w3-show", "");
+		}
 	}
 
 	function gotoSearch() {
@@ -156,7 +174,7 @@
 						</td>
 						<td class="w3-row">
 							<button
-								onclick=""
+								onclick="openUpdateModal(${item.getCourse_id()}, '${item.getCourse_name() }', '${item.getCourse_description() }', '${item.getCourse_date_creat() }',${item.getCourse_status() })"
 								class="w3-button w3-half w3-light-green">Edit</button>
 							<button
 								onclick=""
@@ -254,6 +272,73 @@
 			</footer>
 		</div>
 	</div>
-	
+
+	<div id="update_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('update_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="course.header_update_course" />
+				</h2>
+			</header>
+			<form id="update_form" class="w3-container">
+				<input type="hidden" name="_action"> 
+				<input type="hidden" name="q"> 
+				<input type="hidden" name="page">
+				<input type="hidden" name="course_id"> 
+				<input type="hidden" name="course_date"> 
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="course.field_course_name" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="course_name"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="course.field_course_desc" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="course_desc"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=50 >
+				</div>
+				<div class="w3-row w3-margin-top">
+					<c:forEach items="${statuses }" var="item">	
+						<div class="w3-col" style="width:150px">
+							<input class="w3-radio" type="radio"
+							 name="course_status" value="${item.getStatus_id() }">
+							<label>${item.getStatus_description() }</label>
+						</div>					
+					</c:forEach>
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('update_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="course.btn_update" />
+						</button>
+						<button
+							onclick="document.getElementById('update_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="course.btn_cancel" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
+		
 </body>
 </html>

@@ -179,7 +179,7 @@
 						<a href="?page=${idx }&q=${sessionScope['search_vtype']}"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
-						</a>
+						</a> 
 					</c:forEach>
 					<a href="?page=${total_page }&q=${sessionScope['search_vtype']}" class="w3-button">»</a>
 				</div>
