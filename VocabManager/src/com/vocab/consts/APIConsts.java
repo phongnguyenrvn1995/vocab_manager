@@ -14,6 +14,7 @@ public class APIConsts {
 	public static final String API_COURSE_GETS_COUNT = "/VocabRestApi/vocab_api/course/gets_count";
 	public static final String API_COURSE_SAVE = "/VocabRestApi/vocab_api/course/save";
 	public static final String API_COURSE_UPDATE = "/VocabRestApi/vocab_api/course/update";
+	public static final String API_COURSE_DELETE = "/VocabRestApi/vocab_api/course/delete/";
 	
 
 	public static final String KEY_SEARCH_STR = "searchStr=";

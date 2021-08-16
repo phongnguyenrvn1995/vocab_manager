@@ -40,6 +40,20 @@
 <title><fmt:message key="course.title_course_manager" /></title>
 <script type="text/javascript">	
 
+	function openDelModal(id, name) {
+		document.getElementById('del_modal').style.display='block';
+		document.getElementById('del_desc').innerHTML = name;
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		var del_form = document.getElementById('del_form');
+		del_form['action'] = 'CourseController';
+		del_form['method'] = 'POST';
+		del_form['_action'].value = 'delete';
+		del_form['page'].value = ${page};
+		del_form['course_id'].value = id;
+		del_form['q'].value = search_value;
+	}
+	
 	function openAddModal() {
 		document.getElementById('add_modal').style.display = 'block';
 
@@ -53,12 +67,14 @@
 	function openUpdateModal(id, name, desc, date, status) {
 		document.getElementById('update_modal').style.display = 'block';
 
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
 		var update_form = document.getElementById('update_form');
 		update_form['action'] = 'CourseController';
 		update_form['method'] = 'POST';
 		update_form['page'].value = ${page };
 		update_form['_action'].value = 'update';
-		update_form['q'].value = '';
+		update_form['q'].value = search_value;
 
 		update_form['course_id'].value = id;
 		update_form['course_name'].value = name;
@@ -177,7 +193,7 @@
 								onclick="openUpdateModal(${item.getCourse_id()}, '${item.getCourse_name() }', '${item.getCourse_description() }', '${item.getCourse_date_creat() }',${item.getCourse_status() })"
 								class="w3-button w3-half w3-light-green">Edit</button>
 							<button
-								onclick=""
+								onclick="openDelModal(${item.getCourse_id()}, '${item.getCourse_name() }')"
 								class="w3-button w3-half w3-red">Delete</button>
 						</td>
 					</tr>
@@ -340,5 +356,49 @@
 		</div>
 	</div>
 		
+	<div id="del_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('del_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="course.header_delete" />
+				</h2>
+			</header>
+			<div class="w3-container">
+				<p class="w3-center">
+					<fmt:message key="course.hint_do_you_want_to_delete" />
+					[<span id="del_desc"></span>]?
+				</p>
+			</div>
+			<div style="display: none;">
+				<form id="del_form">
+					<input name="_action"> 
+					<input name="course_id"> 
+					<input name="page">
+					<input name="q">
+				</form>
+			</div>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('del_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="course.btn_yes" />
+						</button>
+						<button
+							onclick="document.getElementById('del_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="course.btn_no" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
 </body>
 </html>
