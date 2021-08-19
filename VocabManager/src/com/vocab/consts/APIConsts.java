@@ -17,5 +17,8 @@ public class APIConsts {
 	public static final String API_COURSE_DELETE = "/VocabRestApi/vocab_api/course/delete/";
 	
 
+	public static final String API_LESSON_GETS = "/VocabRestApi/vocab_api/lesson/gets";
+	
+
 	public static final String KEY_SEARCH_STR = "searchStr=";
 }

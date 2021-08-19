@@ -13,7 +13,7 @@
 	}
 	
 	function gotoLessonMng() {
-		window.location.href = "MainController?id=lesson";
+		window.location.href = "LessonController";
 	}
 	
 	function gotoVocabMng() {
