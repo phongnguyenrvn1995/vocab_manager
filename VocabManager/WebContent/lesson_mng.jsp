@@ -6,6 +6,10 @@
 <c:set var="list" value="${requestScope.list }" />
 <c:set var="action_status" value="${requestScope.action_status }" />
 <c:set var="is_successful" value="${requestScope.is_successful }" />
+<c:set var="total_page" value="${requestScope.total_page }" />
+<c:set var="page" value="${(empty requestScope.page) ? 1 : requestScope.page}" />
+<c:set var="statuses" value="${requestScope.statuses }" />
+<c:set var="courses" value="${requestScope.courses }" />
 
 <c:if test="${sessionScope['lang'] == null }">
 	<c:set var="lang" value="en" scope="session" />
@@ -44,6 +48,11 @@
 		}
 	}
 
+	function gotoSearch() {
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		window.location.href = 'LessonController?&q=' + search_value;
+	}
 </script>
 </head>
 <body>
@@ -102,7 +111,25 @@
 							  	href="#" class="w3-button w3-green">Go</a>
 						</div>
 					</div>
-				</div>				
+				</div>
+				<div class="w3-dropdown-hover">
+					<button class="w3-button">Course Filter</button>
+					<div class="w3-dropdown-content w3-bar-block w3-card-4"
+						style="max-height: 200px; overflow: scroll;">
+						<c:forEach items="${courses }" var="c_item">	
+							<a href="#" class="w3-bar-item w3-button">${c_item.getCourse_name() }</a>		
+						</c:forEach>
+					</div>
+				</div>
+				<div class="w3-dropdown-hover">
+					<button class="w3-button">Status Filter</button>
+					<div class="w3-dropdown-content w3-bar-block w3-card-4"
+						style="max-height: 200px; overflow: scroll;">
+						<c:forEach items="${statuses }" var="s_item">
+							<a href="#" class="w3-bar-item w3-button">${s_item.getStatus_description() }</a>
+						</c:forEach>
+					</div>
+				</div>
 			</div>				
 		</div>
 
@@ -120,8 +147,23 @@
 					<tr>
 						<td style="vertical-align: middle;"><c:out value="${item.getLesson_id() }" /></td>
 						<td style="vertical-align: middle;"><c:out value="${item.getLesson_name() }" /></td>
-						<td style="vertical-align: middle;"><c:out value="${item.getLesson_course() }" /></td>
-						<td style="vertical-align: middle;"><c:out value="${item.getLesson_status() }" /></td>
+						<td style="vertical-align: middle;">
+							<c:forEach items="${courses }" var="c_item">	
+								<c:if test="${c_item.getCourse_id() == item.getLesson_course() }">
+									<c:out value="${c_item.getCourse_name() }" />
+								</c:if>				
+							</c:forEach>
+						</td>
+						<td style="vertical-align: middle;">
+							<c:forEach items="${statuses }" var="s_item">	
+								<c:if test="${s_item.getStatus_id() == item.getLesson_status() }">
+									<c:set value="${s_item.getStatus_id() }" var="temp" />
+									<p class="${(temp == 0) ?  'w3-text-green' : 'w3-text-red' }">
+										<c:out value="${s_item.getStatus_description() }" />
+									</p>									
+								</c:if>				
+							</c:forEach>
+						</td>
 						<td class="w3-row">
 							<button
 								onclick=""
@@ -133,6 +175,22 @@
 					</tr>
 				</c:forEach>
 			</table>
+		</div>
+				
+		<div>
+			<div class="w3-display-container" style="height: 50px;">
+				<div class="w3-display-bottomright">
+					<a href="?page=1&q=${sessionScope['search_lesson']}" class="w3-button">«</a>
+					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
+						end="${(page + 2) > total_page ? total_page : (page + 2)}">
+						<a href="?page=${idx }&q=${sessionScope['search_lesson']}"
+							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
+								value="${idx }" />
+						</a>
+					</c:forEach>
+					<a href="?page=${total_page }&q=${sessionScope['search_lesson']}" class="w3-button">»</a>
+				</div>
+			</div>
 		</div>
 		
 		<div class="w3-container w3-margin-top">

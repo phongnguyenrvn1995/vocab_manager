@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.vocab.model.Course;
 import com.vocab.model.Lesson;
+import com.vocab.model.Status;
 import com.vocab.service.CourseService;
 import com.vocab.service.LessonService;
+import com.vocab.service.StatusService;
 
 /**
  * Servlet implementation class LessonController
@@ -20,6 +22,7 @@ import com.vocab.service.LessonService;
 @WebServlet("/LessonController")
 public class LessonController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int itemLimited = 5;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -64,8 +67,35 @@ public class LessonController extends HttpServlet {
 	
 	private void gotoLessonMng(HttpServletRequest request, HttpServletResponse response, int ...page)
 			throws ServletException, IOException {
-		List<Lesson> list = LessonService.gets("");
-		request.setAttribute("list", list);
+		String q = request.getParameter("q");
+		q = q == null ? "" : q;
+		int countItems = LessonService.getsCount(q);
+		List<Status> statuses = StatusService.gets();
+		List<Course> courses = CourseService.gets("");
+		
+		if(countItems != 0) {
+			int total_page = (int)Math.ceil((float)countItems / (float)itemLimited);
+			int pageNo = page.length == 0 ? parseToInt(request.getParameter("page"), 1) : page[0];
+			pageNo = pageNo > total_page ? total_page : pageNo;
+			
+			int offset = pageNo * itemLimited - itemLimited;
+			offset = offset >= 0 ? offset : 0;
+			
+			List<Lesson> list = LessonService.gets(q, itemLimited, offset);
+			request.setAttribute("list", list);
+			request.setAttribute("page", pageNo);
+			request.setAttribute("total_page", total_page);
+		}
+		request.setAttribute("statuses", statuses);
+		request.setAttribute("courses", courses);
 		request.getRequestDispatcher("/lesson_mng.jsp").forward(request, response);
+	}
+	
+	public static int parseToInt(String stringToParse, int defaultValue) {
+	    try {
+	       return Integer.parseInt(stringToParse);
+	    } catch(NumberFormatException ex) {
+	       return defaultValue; //Use default value if parsing failed
+	    }
 	}
 }

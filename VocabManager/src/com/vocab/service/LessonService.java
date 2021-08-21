@@ -16,12 +16,25 @@ import com.vocab.utils.HttpUtils;
 public class LessonService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-		List<Lesson> l = gets("1001", 2, 1);
+		List<Lesson> l = gets("10011");
 		for(Lesson i : l) {
 			System.out.println(i.getLesson_name());
 		}
+		
+		System.out.println(getsCount("10011"));
 	}
-
+	
+	public static int getsCount(String q){
+		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_GETS_COUNT;
+		url += "?" + APIConsts.KEY_SEARCH_STR + q;
+		
+		String method = HttpMethod.GET;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "";
+		String count = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(count);
+		return Integer.parseInt(count);
+	}
 	
 	public static List<Lesson> gets(String q, int ...limitAndOffset){
 		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_GETS;
