@@ -16,17 +16,20 @@ import com.vocab.utils.HttpUtils;
 public class LessonService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-		List<Lesson> l = gets("10011");
+		List<Lesson> l = gets("10011", "", "");
 		for(Lesson i : l) {
 			System.out.println(i.getLesson_name());
 		}
 		
-		System.out.println(getsCount("10011"));
+		System.out.println(getsCount("10011", "", ""));
 	}
 	
-	public static int getsCount(String q){
+	public static int getsCount(String q, String courseID, String statusID){
 		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_GETS_COUNT;
-		url += "?" + APIConsts.KEY_SEARCH_STR + q;
+		
+		url += "?" + APIConsts.KEY_SEARCH_STR + q + 
+				"&" + APIConsts.KEY_COURSE_ID + courseID +
+				"&" + APIConsts.KEY_STATUS_ID + statusID;
 		
 		String method = HttpMethod.GET;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
@@ -36,14 +39,16 @@ public class LessonService {
 		return Integer.parseInt(count);
 	}
 	
-	public static List<Lesson> gets(String q, int ...limitAndOffset){
+	public static List<Lesson> gets(String q, String courseID, String statusID, int ...limitAndOffset){
 		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_GETS;
 		
 		if(limitAndOffset.length == 2) {
 			url += "/" + limitAndOffset[0] + "/" + limitAndOffset[1];
 		}
 		
-		url += "?" + APIConsts.KEY_SEARCH_STR + q;
+		url += "?" + APIConsts.KEY_SEARCH_STR + q + 
+				"&" + APIConsts.KEY_COURSE_ID + courseID +
+				"&" + APIConsts.KEY_STATUS_ID + statusID;
 		
 		String method = HttpMethod.GET;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;

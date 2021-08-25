@@ -69,7 +69,14 @@ public class LessonController extends HttpServlet {
 			throws ServletException, IOException {
 		String q = request.getParameter("q");
 		q = q == null ? "" : q;
-		int countItems = LessonService.getsCount(q);
+
+		String course_id = request.getParameter("course_id");
+		course_id = course_id == null ? "" : course_id;
+
+		String status_id = request.getParameter("status_id");
+		status_id = status_id == null ? "" : status_id;
+		
+		int countItems = LessonService.getsCount(q, course_id, status_id);
 		List<Status> statuses = StatusService.gets();
 		List<Course> courses = CourseService.gets("");
 		
@@ -81,7 +88,7 @@ public class LessonController extends HttpServlet {
 			int offset = pageNo * itemLimited - itemLimited;
 			offset = offset >= 0 ? offset : 0;
 			
-			List<Lesson> list = LessonService.gets(q, itemLimited, offset);
+			List<Lesson> list = LessonService.gets(q, course_id, status_id, itemLimited, offset);
 			request.setAttribute("list", list);
 			request.setAttribute("page", pageNo);
 			request.setAttribute("total_page", total_page);

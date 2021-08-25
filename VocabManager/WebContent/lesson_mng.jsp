@@ -23,12 +23,21 @@
 <fmt:setBundle basename="lesson_msg" />
 
 <c:if test="${sessionScope['search_lesson'] == null }">
-	<c:set var="search_lesson" scope="session" value="ex" />
+	<c:set var="search_lesson" scope="session" value="" />
 </c:if>
 
 <c:if test="${param.q != null }">
 	<c:set var="search_lesson" scope="session" value="${param.q }" />
 </c:if>
+
+<c:choose>
+	<c:when test="${param.course_id != null }">
+		<c:set var="course_id" scope="session" value="${param.course_id }" />
+	</c:when>
+	<c:otherwise>
+		<c:set var="course_id" scope="session" value="" />
+	</c:otherwise>
+</c:choose>
 
 <!DOCTYPE html>
 <html>
@@ -51,7 +60,7 @@
 	function gotoSearch() {
 		var txt_search = document.getElementById('txt_search');
 		var search_value = txt_search.value;
-		window.location.href = 'LessonController?&q=' + search_value;
+		window.location.href = 'LessonController?&q=' + search_value + "&course_id=${course_id }";
 	}
 </script>
 </head>
@@ -85,13 +94,13 @@
 							style="right:0; min-width: 70px;">
 						<a class="w3-button" 
 							style="display: block;"
-							href="?lang=vn&page=${page }&q=${sessionScope['search_lesson']}">
+							href="?lang=vn&page=${page }&q=${sessionScope['search_lesson']}&course_id=${course_id }">
 							<img alt="vn" src="images/vn_img.jpg"								
 								style="width: 70px; display: block;">
 						</a> 
 						<a class="w3-button"
 							style="display: block;"
-							href="?lang=en&page=${page }&q=${sessionScope['search_lesson']}">
+							href="?lang=en&page=${page }&q=${sessionScope['search_lesson']}&course_id=${course_id }">
 							<img alt="vn" src="images/en_img.jpg"
 								style="width: 70px; display: block;">
 						</a>
@@ -113,16 +122,27 @@
 					</div>
 				</div>
 				<div class="w3-dropdown-hover">
-					<button class="w3-button">Course Filter</button>
+					<button class="w3-button">
+						<fmt:message key="lesson.filter_course" />
+						<c:out value=": "/>
+						<c:forEach items="${courses }" var="c_item">
+							<c:if test="${c_item.getCourse_id() == course_id }">
+								<c:out value="${c_item.getCourse_name() }" />
+							</c:if>
+						</c:forEach>
+					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4"
 						style="max-height: 200px; overflow: scroll;">
 						<c:forEach items="${courses }" var="c_item">	
-							<a href="#" class="w3-bar-item w3-button">${c_item.getCourse_name() }</a>		
+							<a href="?q=${sessionScope['search_lesson']}&course_id=${c_item.getCourse_id() }" 
+								class="w3-bar-item w3-button">${c_item.getCourse_name() }</a>		
 						</c:forEach>
 					</div>
 				</div>
 				<div class="w3-dropdown-hover">
-					<button class="w3-button">Status Filter</button>
+					<button class="w3-button">
+						<fmt:message key="lesson.filter_status" />
+					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4"
 						style="max-height: 200px; overflow: scroll;">
 						<c:forEach items="${statuses }" var="s_item">
@@ -180,15 +200,15 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="?page=1&q=${sessionScope['search_lesson']}" class="w3-button">«</a>
+					<a href="?page=1&q=${sessionScope['search_lesson']}&course_id=${course_id }" class="w3-button">«</a>
 					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 						end="${(page + 2) > total_page ? total_page : (page + 2)}">
-						<a href="?page=${idx }&q=${sessionScope['search_lesson']}"
+						<a href="?page=${idx }&q=${sessionScope['search_lesson']}&course_id=${course_id }"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
 						</a>
 					</c:forEach>
-					<a href="?page=${total_page }&q=${sessionScope['search_lesson']}" class="w3-button">»</a>
+					<a href="?page=${total_page }&q=${sessionScope['search_lesson']}&course_id=${course_id }" class="w3-button">»</a>
 				</div>
 			</div>
 		</div>

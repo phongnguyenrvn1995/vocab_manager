@@ -17,9 +17,11 @@ public class APIConsts {
 	public static final String API_COURSE_DELETE = "/VocabRestApi/vocab_api/course/delete/";
 	
 
-	public static final String API_LESSON_GETS = "/VocabRestApi/vocab_api/lesson/gets";
-	public static final String API_LESSON_GETS_COUNT = "/VocabRestApi/vocab_api/lesson/gets_count";
+	public static final String API_LESSON_GETS = "/VocabRestApi/vocab_api/lesson/get_filter";
+	public static final String API_LESSON_GETS_COUNT = "/VocabRestApi/vocab_api/lesson/get_filter_count";
 	
 
 	public static final String KEY_SEARCH_STR = "searchStr=";
+	public static final String KEY_COURSE_ID = "courseID=";
+	public static final String KEY_STATUS_ID = "statusID=";
 }
