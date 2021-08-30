@@ -57,6 +57,16 @@
 <title><fmt:message key="lesson.title_lesson_manager" /></title>
 <script type="text/javascript">
 
+	function openAddModal() {
+		document.getElementById('add_modal').style.display = 'block';
+	
+		var update_form = document.getElementById('add_form');
+		update_form['action'] = 'LessonController';
+		update_form['method'] = 'POST';
+		update_form['_action'].value = 'save';
+		update_form['q'].value = '';
+	}
+	
 	function openSelectLang() {
 		var x = document.getElementById("lang_selector");
 		if (x.className.indexOf("w3-show") == -1) {
@@ -130,8 +140,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="w3-dropdown-hover">
-					<button class="w3-button">
+				<div class="w3-quarter w3-dropdown-hover" style="height: 100%">
+					<button class="w3-button w3-light-blue" style="width: 100%; height: 100%">
 						<fmt:message key="lesson.filter_course" />
 						<c:out value=": "/>
 						<c:forEach items="${courses }" var="c_item">
@@ -141,7 +151,7 @@
 						</c:forEach>
 					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4"
-						style="max-height: 200px; overflow: scroll;">						
+						style="max-height: 200px; overflow: scroll; width: inherit;">						
 							<a href="?q=${sessionScope['search_lesson']}&course_id=&status_id=${status_id }"  
 								class="w3-bar-item w3-button">
 								<fmt:message key="lesson.filter_no_filter" />
@@ -152,8 +162,8 @@
 						</c:forEach>
 					</div>
 				</div>
-				<div class="w3-dropdown-hover">
-					<button class="w3-button">
+				<div class="w3-quarter w3-dropdown-hover" style="height: 100%">
+					<button class="w3-button w3-cyan"  style="width: 100%; height: 100%">
 						<fmt:message key="lesson.filter_status" />
 						<c:out value=": "/>						
 						<c:forEach items="${statuses }" var="s_item">
@@ -163,7 +173,7 @@
 						</c:forEach>
 					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4"
-						style="max-height: 200px; overflow: scroll;">
+						style="max-height: 200px; overflow: scroll; width: inherit;">
 							<a href="?q=${sessionScope['search_lesson']}&course_id=${course_id }&status_id="  
 								class="w3-bar-item w3-button">
 								<fmt:message key="lesson.filter_no_filter" />
@@ -245,6 +255,72 @@
 			</button>
 			<a href="?_action=main" class="w3-btn w3-teal"><fmt:message
 					key="lesson.btn_back" /></a>
+		</div>
+	</div>
+	
+	
+	<div id="add_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('add_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="lesson.header_add_new_lesson" />
+				</h2>
+			</header>
+			<form id="add_form" class="w3-container">
+				<input type="hidden" name="_action"> 
+				<input type="hidden" name="q"> 
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="lesson.field_lesson_name" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="lesson_name"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="lesson.field_lesson_course" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<select class="w3-select w3-border" name="lesson_course">
+						<c:forEach items="${courses }" var="c_item">
+							<option value="${c_item.getCourse_id() }">${c_item.getCourse_name() }</option>
+						</c:forEach>
+					</select> 
+				</div>
+				<div class="w3-row w3-margin-top">
+					<c:forEach items="${statuses }" var="item">	
+						<div class="w3-col" style="width:150px">
+							<input class="w3-radio" type="radio" name="lesson_status" value="${item.getStatus_id() }" checked>
+							<label>${item.getStatus_description() }</label>
+						</div>					
+					</c:forEach>
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('add_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_add" />
+						</button>
+						<button
+							onclick="document.getElementById('add_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_cancel" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
 		</div>
 	</div>
 </body>

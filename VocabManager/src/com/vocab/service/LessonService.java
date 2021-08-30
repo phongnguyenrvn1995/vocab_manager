@@ -11,17 +11,25 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vocab.consts.APIConsts;
 import com.vocab.model.Lesson;
+import com.vocab.model.Response;
 import com.vocab.utils.HttpUtils;
 
 public class LessonService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-		List<Lesson> l = gets("10011", "", "");
-		for(Lesson i : l) {
-			System.out.println(i.getLesson_name());
-		}
+//		List<Lesson> l = gets("10011", "", "");
+//		for(Lesson i : l) {
+//			System.out.println(i.getLesson_name());
+//		}
+//		
+//		System.out.println(getsCount("10011", "", ""));
 		
-		System.out.println(getsCount("10011", "", ""));
+		Lesson lesson = new Lesson();
+		lesson.setLesson_name("PHONG PRO");
+		lesson.setLesson_course(1);
+		lesson.setLesson_status(1000);
+		
+		save(lesson);
 	}
 	
 	public static int getsCount(String q, String courseID, String statusID){
@@ -61,4 +69,23 @@ public class LessonService {
 		List<Lesson> list = new Gson().fromJson(json, listType);
 		return list;
 	}
+	
+
+	public static Response save(Lesson lesson){
+		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_SAVE;
+		String method = HttpMethod.PUT;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "lesson_name=" + lesson.getLesson_name() +
+				"&lesson_course=" + lesson.getLesson_course() +
+				"&lesson_status=" + lesson.getLesson_status();
+		
+		
+		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+
 }
