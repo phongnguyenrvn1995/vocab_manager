@@ -25,11 +25,12 @@ public class LessonService {
 //		System.out.println(getsCount("10011", "", ""));
 		
 		Lesson lesson = new Lesson();
+		lesson.setLesson_id(7);
 		lesson.setLesson_name("PHONG PRO");
 		lesson.setLesson_course(1);
-		lesson.setLesson_status(1000);
+		lesson.setLesson_status(0);
 		
-		save(lesson);
+		update(lesson);
 	}
 	
 	public static int getsCount(String q, String courseID, String statusID){
@@ -76,6 +77,24 @@ public class LessonService {
 		String method = HttpMethod.PUT;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
 		String msg = "lesson_name=" + lesson.getLesson_name() +
+				"&lesson_course=" + lesson.getLesson_course() +
+				"&lesson_status=" + lesson.getLesson_status();
+		
+		
+		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+
+	public static Response update(Lesson lesson){
+		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_UPDATE;
+		String method = HttpMethod.POST;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "lesson_id=" + lesson.getLesson_id() +
+				"&lesson_name=" + lesson.getLesson_name() +
 				"&lesson_course=" + lesson.getLesson_course() +
 				"&lesson_status=" + lesson.getLesson_status();
 		

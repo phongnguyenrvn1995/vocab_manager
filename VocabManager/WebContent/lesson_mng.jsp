@@ -67,6 +67,29 @@
 		update_form['q'].value = '';
 	}
 	
+	function openUpdateModal(id, name, course, status) {
+		document.getElementById('update_modal').style.display = 'block';
+
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		var update_form = document.getElementById('update_form');
+		update_form['action'] = 'LessonController';
+		update_form['method'] = 'POST';
+		update_form['page'].value = ${page };
+		update_form['_action'].value = 'update';
+		update_form['q'].value = search_value;
+		update_form['course_id'].value = '${course_id }';
+		update_form['status_id'].value = '${status_id }';
+
+
+		update_form['lesson_id'].value = id;
+		update_form['lesson_name'].value = name;
+		update_form['lesson_course'].value = course;
+		update_form['lesson_status'].value = status;
+		
+	}
+
+	
 	function openSelectLang() {
 		var x = document.getElementById("lang_selector");
 		if (x.className.indexOf("w3-show") == -1) {
@@ -222,7 +245,7 @@
 						</td>
 						<td class="w3-row">
 							<button
-								onclick=""
+								onclick="openUpdateModal('${item.getLesson_id() }', '${item.getLesson_name() }', '${item.getLesson_course() }', '${item.getLesson_status() }')"
 								class="w3-button w3-half w3-light-green">Edit</button>
 							<button
 								onclick=""
@@ -323,5 +346,77 @@
 			</footer>
 		</div>
 	</div>
+	
+	
+	<div id="update_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('update_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="course.header_update_course" />
+				</h2>
+			</header>
+			<form id="update_form" class="w3-container">
+			
+				<input type="hidden" name="_action"> 
+				<input type="hidden" name="page"> 
+				<input type="hidden" name="q"> 
+				<input type="hidden" name="lesson_id"> 
+				<input type="hidden" name="course_id"> 
+				<input type="hidden" name="status_id"> 
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="lesson.field_lesson_name" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="lesson_name"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="lesson.field_lesson_course" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<select class="w3-select w3-border" name="lesson_course">
+						<c:forEach items="${courses }" var="c_item">
+							<option value="${c_item.getCourse_id() }">${c_item.getCourse_name() }</option>
+						</c:forEach>
+					</select> 
+				</div>
+				<div class="w3-row w3-margin-top">
+					<c:forEach items="${statuses }" var="item">	
+						<div class="w3-col" style="width:150px">
+							<input class="w3-radio" type="radio" name="lesson_status" value="${item.getStatus_id() }" checked>
+							<label>${item.getStatus_description() }</label>
+						</div>					
+					</c:forEach>
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('update_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_update" />
+						</button>
+						<button
+							onclick="document.getElementById('update_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_cancel" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
+		
 </body>
 </html>

@@ -68,6 +68,7 @@ public class LessonController extends HttpServlet {
 			save(request, response);
 			break;
 		case "update":
+			update(request, response);
 			break;
 		case "delete":
 			break;
@@ -114,30 +115,81 @@ public class LessonController extends HttpServlet {
 
 	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String lesson_name = request.getParameter("lesson_name");
-		int lesson_course = parseToInt(request.getParameter("lesson_course"), -1);
-		int lesson_status = parseToInt(request.getParameter("lesson_status"), -1);
+		String lesson_course = request.getParameter("lesson_course");
+		String lesson_status = request.getParameter("lesson_status");
 		System.out.println(lesson_name);
 		System.out.println(lesson_course);
 		System.out.println(lesson_status);
 
 		String actionStatus = "";
 		boolean isScf = false;
-		if (lesson_name != null && !lesson_name.isEmpty()) {
+		if (lesson_name != null && !lesson_name.isEmpty()
+						&& lesson_course != null && !lesson_course.isEmpty()
+								&& lesson_status != null && !lesson_status.isEmpty()) {
 
 			Lesson lesson = new Lesson();
 			lesson.setLesson_name(lesson_name);
-			lesson.setLesson_course(lesson_course);
-			lesson.setLesson_status(lesson_status);
+			lesson.setLesson_course(parseToInt(lesson_course, -1));
+			lesson.setLesson_status(parseToInt(lesson_status, -1));
 
 			Response resp = LessonService.save(lesson);
 			actionStatus = resp.getResponse_description();
 			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
 		} else {
-			actionStatus = "Course name must be not empty!";
+			if (lesson_name == null || lesson_name.isEmpty())
+				actionStatus = "Lesson name must be not empty!";
+			else if (lesson_course == null || lesson_course.isEmpty())
+				actionStatus = "Course id must be not empty!";
+			else if (lesson_status == null || lesson_status.isEmpty())
+				actionStatus = "Status id must be not empty!";
 		}
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoLessonMng(request, response, Integer.MAX_VALUE);
+	}
+	
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String lesson_id = request.getParameter("lesson_id");
+		String lesson_name = request.getParameter("lesson_name");
+		String lesson_course = request.getParameter("lesson_course");
+		String lesson_status = request.getParameter("lesson_status");
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		System.out.println(lesson_id);
+		System.out.println(lesson_name);
+		System.out.println(lesson_course);
+		System.out.println(lesson_status);
+		System.out.println(pageNo);
+
+		String actionStatus = "";
+		boolean isScf = false;
+		if (lesson_id != null && !lesson_id.isEmpty() 
+				&& lesson_name != null && !lesson_name.isEmpty()
+						&& lesson_course != null && !lesson_course.isEmpty()
+								&& lesson_status != null && !lesson_status.isEmpty()) {
+			
+
+			Lesson lesson = new Lesson();
+			lesson.setLesson_id(parseToInt(lesson_id, -1));
+			lesson.setLesson_name(lesson_name);
+			lesson.setLesson_course(parseToInt(lesson_course, -1));
+			lesson.setLesson_status(parseToInt(lesson_status, -1));
+			
+			Response resp = LessonService.update(lesson);
+			actionStatus = resp.getResponse_description();
+			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+		} else {
+			if (lesson_id == null || lesson_id.isEmpty())
+				actionStatus = "Lesson id must be not empty!";
+			else if (lesson_name == null || lesson_name.isEmpty())
+				actionStatus = "Lesson name must be not empty!";
+			else if (lesson_course == null || lesson_course.isEmpty())
+				actionStatus = "Course id must be not empty!";
+			else if (lesson_status == null || lesson_status.isEmpty())
+				actionStatus = "Status id must be not empty!";
+		}
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoLessonMng(request, response, pageNo);
 	}
 
 	public static int parseToInt(String stringToParse, int defaultValue) {
