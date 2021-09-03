@@ -71,6 +71,7 @@ public class LessonController extends HttpServlet {
 			update(request, response);
 			break;
 		case "delete":
+			delete(request, response);
 			break;
 		}
 	}
@@ -187,6 +188,23 @@ public class LessonController extends HttpServlet {
 			else if (lesson_status == null || lesson_status.isEmpty())
 				actionStatus = "Status id must be not empty!";
 		}
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoLessonMng(request, response, pageNo);
+	}
+
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int lesson_id = parseToInt(request.getParameter("lesson_id"), -1 );
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		System.out.println("lesson_id = " + lesson_id);
+		System.out.println("pageNo = " + pageNo);
+		
+		String actionStatus;
+		boolean isScf = false;
+		Response resp = LessonService.delete(lesson_id);
+		actionStatus = resp.getResponse_description();
+		isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoLessonMng(request, response, pageNo);

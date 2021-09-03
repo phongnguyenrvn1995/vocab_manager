@@ -17,7 +17,7 @@ import com.vocab.utils.HttpUtils;
 public class CourseService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-		System.out.println(delete(5).getResponse_description());
+		System.out.println(delete(5555).getResponse_description());
 	}
 	
 	public static int getsCount(String q){

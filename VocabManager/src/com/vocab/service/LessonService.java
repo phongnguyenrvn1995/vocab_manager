@@ -17,20 +17,7 @@ import com.vocab.utils.HttpUtils;
 public class LessonService {
 	public static void main(String[] ar) {
 		System.out.println("OK");
-//		List<Lesson> l = gets("10011", "", "");
-//		for(Lesson i : l) {
-//			System.out.println(i.getLesson_name());
-//		}
-//		
-//		System.out.println(getsCount("10011", "", ""));
-		
-		Lesson lesson = new Lesson();
-		lesson.setLesson_id(7);
-		lesson.setLesson_name("PHONG PRO");
-		lesson.setLesson_course(1);
-		lesson.setLesson_status(0);
-		
-		update(lesson);
+		delete(2222);
 	}
 	
 	public static int getsCount(String q, String courseID, String statusID){
@@ -107,4 +94,17 @@ public class LessonService {
 		return response;
 	}
 
+	public static Response delete(int id){
+		String url = APIConsts.BASE_URL + APIConsts.API_LESSON_DELETE + id;
+		String method = HttpMethod.DELETE;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		
+		
+		String json = HttpUtils.request(url, method, contentType, "");
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
 }

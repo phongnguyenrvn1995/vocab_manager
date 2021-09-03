@@ -57,6 +57,24 @@
 <title><fmt:message key="lesson.title_lesson_manager" /></title>
 <script type="text/javascript">
 
+	function openDelModal(id, name) {
+		document.getElementById('del_modal').style.display='block';
+		document.getElementById('del_desc').innerHTML = name;
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		var del_form = document.getElementById('del_form');
+
+		del_form['action'] = 'LessonController';
+		del_form['method'] = 'POST';
+		del_form['page'].value = ${page };
+		del_form['_action'].value = 'delete';
+		del_form['q'].value = search_value;
+		del_form['course_id'].value = '${course_id }';
+		del_form['status_id'].value = '${status_id }';
+        
+		del_form['lesson_id'].value = id;
+	}
+
 	function openAddModal() {
 		document.getElementById('add_modal').style.display = 'block';
 	
@@ -248,7 +266,7 @@
 								onclick="openUpdateModal('${item.getLesson_id() }', '${item.getLesson_name() }', '${item.getLesson_course() }', '${item.getLesson_status() }')"
 								class="w3-button w3-half w3-light-green">Edit</button>
 							<button
-								onclick=""
+								onclick="openDelModal('${item.getLesson_id() }', '${item.getLesson_name() }')"
 								class="w3-button w3-half w3-red">Delete</button>
 						</td>
 					</tr>
@@ -356,7 +374,7 @@
 					onclick="document.getElementById('update_modal').style.display='none'"
 					class="w3-button w3-display-topright">&times;</span>
 				<h2 class="w3-center">
-					<fmt:message key="course.header_update_course" />
+					<fmt:message key="lesson.header_update_lesson" />
 				</h2>
 			</header>
 			<form id="update_form" class="w3-container">
@@ -418,5 +436,51 @@
 		</div>
 	</div>
 		
+	<div id="del_modal" class="w3-modal">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('del_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="lesson.header_delete" />
+				</h2>
+			</header>
+			<div class="w3-container">
+				<p class="w3-center">
+					<fmt:message key="lesson.hint_do_you_want_to_delete" />
+					[<span id="del_desc"></span>]?
+				</p>
+			</div>
+			<div style="display: none;">
+				<form id="del_form">
+					<input type="hidden" name="_action"> 
+					<input type="hidden" name="page"> 
+					<input type="hidden" name="q"> 
+					<input type="hidden" name="lesson_id"> 
+					<input type="hidden" name="course_id"> 
+					<input type="hidden" name="status_id"> 
+				</form>
+			</div>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('del_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_yes" />
+						</button>
+						<button
+							onclick="document.getElementById('del_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="lesson.btn_no" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
 </body>
 </html>
