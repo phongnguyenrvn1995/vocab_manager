@@ -17,7 +17,7 @@
 	}
 	
 	function gotoVocabMng() {
-		window.location.href = "MainController?id=vocab";
+		window.location.href = "VocabController";
 	}
 	
 	function gotoRespMng() {
