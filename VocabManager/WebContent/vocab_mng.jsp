@@ -3,8 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page errorPage="error_page.jsp"%>
 
+<c:set var="list" value="${requestScope.list }" />
 <c:set var="action_status" value="${requestScope.action_status }" />
 <c:set var="is_successful" value="${requestScope.is_successful }" />
+<c:set var="total_page" value="${requestScope.total_page }" />
+<c:set var="page" value="${(empty requestScope.page) ? 1 : requestScope.page}" />
+<c:set var="lessons" value="${requestScope.lessons }" />
+<c:set var="vocab_types" value="${requestScope.vocab_types }" />
+
 
 <c:if test="${sessionScope['lang'] == null }">
 	<c:set var="lang" value="en" scope="session" />
@@ -115,7 +121,55 @@
 					<th><fmt:message key="vocab.field_vocab_sound_url" /></th>
 					<th><fmt:message key="vocab.field_action" /></th>
 				</tr>
+				<c:forEach items="${list }" var="item">
+					<tr>						
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_id() }" /></td>
+						<td style="vertical-align: middle;">
+							<c:forEach items="${vocab_types }" var="vt_item">	
+								<c:if test="${item.getVocab_type() == vt_item.getVocab_type_id() }">
+									<c:out value="${vt_item.getVocab_type_name() }" />								
+								</c:if>				
+							</c:forEach>
+						</td>
+						<td style="vertical-align: middle;">							
+							<c:forEach items="${lessons }" var="l_item">	
+								<c:if test="${item.getVocab_lesson() == l_item.getLesson_id() }">
+									<c:out value="${l_item.getLesson_name() }" />								
+								</c:if>				
+							</c:forEach>
+						</td>
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_en() }" /></td>
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_ipa() }" /></td>
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_vi() }" /></td>
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_description() }" /></td>
+						<td style="vertical-align: middle;"><c:out value="${item.getVocab_sound_url() }" /></td>
+						<td class="w3-row">
+							<button
+								onclick=""
+								class="w3-button w3-half w3-light-green">Edit</button>
+							<button
+								onclick=""
+								class="w3-button w3-half w3-red">Delete</button>
+						</td>
+					</tr>
+				</c:forEach>
 			</table>
+		</div>
+		
+		<div>
+			<div class="w3-display-container" style="height: 50px;">
+				<div class="w3-display-bottomright">
+					<a href="?page=1" class="w3-button">«</a>
+					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
+						end="${(page + 2) > total_page ? total_page : (page + 2)}">
+						<a href="?page=${idx }"
+							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
+								value="${idx }" />
+						</a>
+					</c:forEach>
+					<a href="?page=${total_page }" class="w3-button">»</a>
+				</div>
+			</div>
 		</div>
 		
 		<div class="w3-container w3-margin-top">

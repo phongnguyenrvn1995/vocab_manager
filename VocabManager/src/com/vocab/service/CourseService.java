@@ -1,6 +1,8 @@
 package com.vocab.service;
 
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class CourseService {
 	}
 	
 	public static int getsCount(String q){
+		q = URLEncoder.encode(q, StandardCharsets.UTF_8);
 		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_GETS_COUNT;
 		url += "?" + APIConsts.KEY_SEARCH_STR + q;
 		
@@ -34,6 +37,7 @@ public class CourseService {
 
 	
 	public static List<Course> gets(String q, int ...limitAndOffset){
+		q = URLEncoder.encode(q, StandardCharsets.UTF_8);
 		String url = APIConsts.BASE_URL + APIConsts.API_COURSE_GETS;
 		
 		if(limitAndOffset.length == 2) {

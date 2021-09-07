@@ -24,7 +24,13 @@ public class APIConsts {
 	public static final String API_LESSON_DELETE = "/VocabRestApi/vocab_api/lesson/delete/";
 	
 
+	public static final String API_VOCAB_GETS = "/VocabRestApi/vocab_api/vocab/get_filter";
+	public static final String API_VOCAB_GETS_COUNT = "/VocabRestApi/vocab_api/vocab/get_filter_count";
+	
+
 	public static final String KEY_SEARCH_STR = "searchStr=";
 	public static final String KEY_COURSE_ID = "courseID=";
 	public static final String KEY_STATUS_ID = "statusID=";
+	public static final String KEY_LESSON_ID = "lessonID=";
+	public static final String KEY_TYPE_ID = "typeID=";
 }
