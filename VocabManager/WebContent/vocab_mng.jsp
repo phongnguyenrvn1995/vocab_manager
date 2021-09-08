@@ -24,7 +24,11 @@
 <fmt:setBundle basename="vocab_msg" />
 
 <c:if test="${sessionScope['search_vocab'] == null }">
-	<c:set var="search_vocab" scope="session" value="ex" />
+	<c:set var="search_vocab" scope="session" value="" />
+</c:if>
+
+<c:if test="${param.q != null }">
+	<c:set var="search_vocab" scope="session" value="${param.q }" />
 </c:if>
 
 <!DOCTYPE html>
@@ -42,6 +46,13 @@
 		} else {
 			x.className = x.className.replace(" w3-show", "");
 		}
+	}
+	
+
+	function gotoSearch() {
+		var txt_search = document.getElementById('txt_search');
+		var search_value = txt_search.value;
+		window.location.href = 'VocabController?&q=' + search_value;
 	}
 </script>
 </head>
@@ -75,13 +86,13 @@
 							style="right:0; min-width: 70px;">
 						<a class="w3-button" 
 							style="display: block;"
-							href="?lang=vn">
+							href="?lang=vn&page=${page }&q=${search_vocab }">
 							<img alt="vn" src="images/vn_img.jpg"								
 								style="width: 70px; display: block;">
 						</a> 
 						<a class="w3-button"
 							style="display: block;"
-							href="?lang=en">
+							href="?lang=en&page=${page }&q=${search_vocab }">
 							<img alt="vn" src="images/en_img.jpg"
 								style="width: 70px; display: block;">
 						</a>
@@ -159,15 +170,15 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="?page=1" class="w3-button">«</a>
+					<a href="?page=1&q=${search_vocab }" class="w3-button">«</a>
 					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 						end="${(page + 2) > total_page ? total_page : (page + 2)}">
-						<a href="?page=${idx }"
+						<a href="?page=${idx }&q=${search_vocab }"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
 						</a>
 					</c:forEach>
-					<a href="?page=${total_page }" class="w3-button">»</a>
+					<a href="?page=${total_page }&q=${search_vocab }" class="w3-button">»</a>
 				</div>
 			</div>
 		</div>
