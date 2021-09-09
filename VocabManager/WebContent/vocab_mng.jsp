@@ -65,6 +65,16 @@
 			x.className = x.className.replace(" w3-show", "");
 		}
 	}
+
+	function openAddModal() {
+		document.getElementById('add_modal').style.display = 'block';
+	
+		var update_form = document.getElementById('add_form');
+		update_form['action'] = 'VocabController';
+		update_form['method'] = 'POST';
+		update_form['_action'].value = 'save';
+		update_form['q'].value = '';
+	}
 	
 
 	function gotoSearch() {
@@ -192,7 +202,7 @@
 					<th><fmt:message key="vocab.field_vocab_en" /></th>
 					<th><fmt:message key="vocab.field_vocab_ipa" /></th>
 					<th><fmt:message key="vocab.field_vocab_vi" /></th>
-					<th><fmt:message key="vocab.field_vocab_description" /></th>
+					<th style="width: 20%"><fmt:message key="vocab.field_vocab_description" /></th>
 					<th><fmt:message key="vocab.field_vocab_sound_url" /></th>
 					<th><fmt:message key="vocab.field_action" /></th>
 				</tr>
@@ -218,7 +228,7 @@
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_vi() }" /></td>
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_description() }" /></td>
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_sound_url() }" /></td>
-						<td class="w3-row">
+						<td class="w3-row" style="vertical-align: middle;">
 							<button
 								onclick=""
 								class="w3-button w3-half w3-light-green">Edit</button>
@@ -255,5 +265,124 @@
 					key="vocab.btn_back" /></a>
 		</div>
 	</div>
+	
+	
+	
+	<div id="add_modal" class="w3-modal" style="padding-top: 10px;">
+		<div class="w3-modal-content w3-animate-top w3-card-4"
+			style="width: 50%">
+			<header class="w3-container w3-teal">
+				<span
+					onclick="document.getElementById('add_modal').style.display='none'"
+					class="w3-button w3-display-topright">&times;</span>
+				<h2 class="w3-center">
+					<fmt:message key="vocab.header_add_new_vocab" />
+				</h2>
+			</header>
+			<form id="add_form" class="w3-container">
+				<input type="hidden" name="_action"> 
+				<input type="hidden" name="q"> 
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_en" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="vocab_en"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_vi" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="vocab_vi"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_type" /></b>
+					</label>
+				</div>				
+				<div class="w3-row">
+					<select class="w3-select w3-border" name="vocab_type">
+						<c:forEach items="${vocab_types }" var="vt_item">	
+							<option value="${vt_item.getVocab_type_id() }">${vt_item.getVocab_type_name() }</option>
+						</c:forEach>
+					</select> 
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_ipa" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="vocab_ipa"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_description" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="vocab_description"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=200 >
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_lesson" /></b>
+					</label>
+				</div>		
+				<div class="w3-row">
+					<select class="w3-select w3-border" name="vocab_lesson">		
+						<c:forEach items="${lessons }" var="l_item">		
+							<option value="${l_item.getLesson_id()  }">${l_item.getLesson_name() }</option>
+						</c:forEach>
+					</select> 
+				</div>
+				
+				<div class="w3-row w3-margin-top">
+					<label class="w3-text-teal">
+						<b><fmt:message	key="vocab.field_vocab_sound_url" /></b>
+					</label>
+				</div>
+				<div class="w3-row">
+					<input name="vocab_sound_url"
+						class="w3-input w3-border w3-light-grey w3-rest"
+						type="text" maxlength=20 >
+				</div>
+			</form>
+			<footer class="w3-container w3-padding-16">
+				<div class="w3-row" style="align-items: center;">
+					<p class="w3-quarter"></p>
+					<div class="w3-half  w3-center">
+						<button onclick="document.getElementById('add_form').submit()"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="vocab.btn_add" />
+						</button>
+						<button
+							onclick="document.getElementById('add_modal').style.display='none'"
+							class="w3-button w3-light-grey" style="width: 40%">
+							<fmt:message key="vocab.btn_cancel" />
+						</button>
+					</div>
+					<p class="w3-quarter"></p>
+				</div>
+			</footer>
+		</div>
+	</div>
+	
+	
 </body>
 </html>
