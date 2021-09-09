@@ -44,7 +44,6 @@ public class StatusController extends HttpServlet {
 		} else {
 			gotoStatusMng(request, response);
 		}
-		gotoStatusMng(request, response);
 	}
 
 	/**

@@ -53,7 +53,6 @@ public class CourseController extends HttpServlet {
 		} else {
 			gotoCourseMng(request, response);
 		}
-		gotoCourseMng(request, response);
 	}
 
 	/**

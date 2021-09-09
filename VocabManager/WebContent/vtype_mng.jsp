@@ -22,7 +22,7 @@
 <fmt:setBundle basename="vtype_msg" />
 
 <c:if test="${sessionScope['search_vtype'] == null }">
-	<c:set var="search_vtype" scope="session" value="ex" />
+	<c:set var="search_vtype" scope="session" value="" />
 </c:if>
 
 <c:if test="${param.q != null }">

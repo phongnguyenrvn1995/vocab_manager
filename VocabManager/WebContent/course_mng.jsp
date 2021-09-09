@@ -23,7 +23,7 @@
 <fmt:setBundle basename="course_msg" />
 
 <c:if test="${sessionScope['search_course'] == null }">
-	<c:set var="search_course" scope="session" value="ex" />
+	<c:set var="search_course" scope="session" value="" />
 </c:if>
 
 <c:if test="${param.q != null }">

@@ -70,7 +70,7 @@
 	function gotoSearch() {
 		var txt_search = document.getElementById('txt_search');
 		var search_value = txt_search.value;
-		window.location.href = 'VocabController?&q=' + search_value +"&vt_id=${vt_id }";
+		window.location.href = 'VocabController?&q=' + search_value +"&vt_id=${vt_id }&lesson_id=${lesson_id}";
 	}
 </script>
 </head>
@@ -104,13 +104,13 @@
 							style="right:0; min-width: 70px;">
 						<a class="w3-button" 
 							style="display: block;"
-							href="?lang=vn&page=${page }&q=${search_vocab }&vt_id=${vt_id }">
+							href="?lang=vn&page=${page }&q=${search_vocab }&vt_id=${vt_id }&lesson_id=${lesson_id}">
 							<img alt="vn" src="images/vn_img.jpg"								
 								style="width: 70px; display: block;">
 						</a> 
 						<a class="w3-button"
 							style="display: block;"
-							href="?lang=en&page=${page }&q=${search_vocab }&vt_id=${vt_id }">
+							href="?lang=en&page=${page }&q=${search_vocab }&vt_id=${vt_id }&lesson_id=${lesson_id}">
 							<img alt="vn" src="images/en_img.jpg"
 								style="width: 70px; display: block;">
 						</a>
@@ -144,13 +144,38 @@
 					</button>
 					<div class="w3-dropdown-content w3-bar-block w3-card-4"
 						style="max-height: 200px; overflow: scroll; width: inherit;">						
-							<a href="?vt_id="  
+							<a href="?vt_id=&lesson_id=${lesson_id}"  
 								class="w3-bar-item w3-button">
 								<fmt:message key="vocab.filter_no_filter" />
 							</a>
 						<c:forEach items="${vocab_types }" var="vt_item">	
-							<a href="?vt_id=${vt_item.getVocab_type_id() }" 
+							<a href="?vt_id=${vt_item.getVocab_type_id() }&lesson_id=${lesson_id}" 
 								class="w3-bar-item w3-button">${vt_item.getVocab_type_name() }</a>		
+						</c:forEach>
+					</div>
+				</div>
+				
+				<div class="w3-quarter w3-dropdown-hover" style="height: 100%">
+					<button class="w3-button w3-cyan"  style="width: 100%; height: 100%">
+						<fmt:message key="vocab.filter_lesson" />
+						<c:out value=": "/>						
+						<c:forEach items="${lessons }" var="l_item">
+							<c:if test="${l_item.getLesson_id() == lesson_id  && !empty lesson_id}">
+								<b><c:out value="${l_item.getLesson_name() }"/></b>
+							</c:if>
+						</c:forEach>
+					</button>
+					<div class="w3-dropdown-content w3-bar-block w3-card-4"
+						style="max-height: 200px; overflow: scroll; width: inherit;">
+							<a href="?lesson_id=&vt_id=${vt_id }"  
+								class="w3-bar-item w3-button">
+								<fmt:message key="vocab.filter_no_filter" />
+							</a>
+						<c:forEach items="${lessons }" var="l_item">
+							<a href="?lesson_id=${l_item.getLesson_id() }&vt_id=${vt_id }"  
+								class="w3-bar-item w3-button">
+								${l_item.getLesson_name() }
+							</a>
 						</c:forEach>
 					</div>
 				</div>
@@ -209,15 +234,15 @@
 		<div>
 			<div class="w3-display-container" style="height: 50px;">
 				<div class="w3-display-bottomright">
-					<a href="?page=1&q=${search_vocab }&vt_id=${vt_id }" class="w3-button">«</a>
+					<a href="?page=1&q=${search_vocab }&vt_id=${vt_id }&lesson_id=${lesson_id}" class="w3-button">«</a>
 					<c:forEach var="idx" begin="${(page - 2) < 1 ? 1 : (page - 2)}"
 						end="${(page + 2) > total_page ? total_page : (page + 2)}">
-						<a href="?page=${idx }&q=${search_vocab }&vt_id=${vt_id }"
+						<a href="?page=${idx }&q=${search_vocab }&vt_id=${vt_id }&lesson_id=${lesson_id}"
 							class="w3-button ${(idx == page) ? 'w3-green' : ''} "> <c:out
 								value="${idx }" />
 						</a>
 					</c:forEach>
-					<a href="?page=${total_page }&q=${search_vocab }&vt_id=${vt_id }" class="w3-button">»</a>
+					<a href="?page=${total_page }&q=${search_vocab }&vt_id=${vt_id }&lesson_id=${lesson_id}" class="w3-button">»</a>
 				</div>
 			</div>
 		</div>

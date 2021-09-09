@@ -73,8 +73,12 @@ public class VocabController extends HttpServlet {
 		
 		String vt_id = request.getParameter("vt_id");
 		vt_id = vt_id == null ? "" : vt_id;
+		
+		String lesson_id = request.getParameter("lesson_id");
+		lesson_id = lesson_id == null ? "" : lesson_id;
 
-		int countItems = VocabService.getsCount(q, vt_id, "");
+		
+		int countItems = VocabService.getsCount(q, vt_id, lesson_id);
 		List<Lesson> lessons = LessonService.gets("", "", "");
 		List<VocabType> vocabTypes = VTypeService.gets("");
 		
@@ -86,7 +90,7 @@ public class VocabController extends HttpServlet {
 			int offset = pageNo * itemLimited - itemLimited;
 			offset = offset >= 0 ? offset : 0;
 
-			List<Vocab> list = VocabService.gets(q, vt_id, "", itemLimited, offset);
+			List<Vocab> list = VocabService.gets(q, vt_id, lesson_id, itemLimited, offset);
 			request.setAttribute("list", list);
 			request.setAttribute("page", pageNo);
 			request.setAttribute("total_page", total_page);
