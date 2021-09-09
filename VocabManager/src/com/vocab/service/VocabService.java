@@ -22,16 +22,17 @@ public class VocabService {
 		System.out.println("OK");
 //		System.out.println(gets("en 1", "", "").size());
 //		System.out.println(getsCount("en ", "", ""));
-		Vocab vocab = new Vocab();
-		vocab.setVocab_id(112);
-		vocab.setVocab_en("en");
-		vocab.setVocab_ipa("ipa");
-		vocab.setVocab_vi("vi");
-		vocab.setVocab_lesson(2);
-		vocab.setVocab_type(2);
-		vocab.setVocab_sound_url("url");
-		vocab.setVocab_description("desc");
-		update(vocab);
+//		Vocab vocab = new Vocab();
+//		vocab.setVocab_id(112);
+//		vocab.setVocab_en("en");
+//		vocab.setVocab_ipa("ipa");
+//		vocab.setVocab_vi("vi");
+//		vocab.setVocab_lesson(2);
+//		vocab.setVocab_type(2);
+//		vocab.setVocab_sound_url("url");
+//		vocab.setVocab_description("desc");
+//		update(vocab);
+//		delete(102);
 	}
 
 	public static int getsCount(String q, String typeID, String lessonID){
@@ -112,6 +113,20 @@ public class VocabService {
 		
 		
 		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+	
+	public static Response delete(int id){
+		String url = APIConsts.BASE_URL + APIConsts.API_VOCAB_DELETE + id;
+		String method = HttpMethod.DELETE;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		
+		
+		String json = HttpUtils.request(url, method, contentType, "");
 		System.out.println(json);
 				
 		Response response = new Gson().fromJson(json, Response.class);

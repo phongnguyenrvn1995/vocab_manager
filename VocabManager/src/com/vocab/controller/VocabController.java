@@ -68,7 +68,7 @@ public class VocabController extends HttpServlet {
 			update(request, response);
 			break;
 		case "delete":
-//			delete(request, response);
+			delete(request, response);
 			break;
 		}
 	}
@@ -239,6 +239,23 @@ public class VocabController extends HttpServlet {
 			else if (vocab_sound_url == null || vocab_sound_url.isEmpty())
 				actionStatus = "Sound URL must be not empty!";
 		}
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoVocabMng(request, response, pageNo);
+	}
+
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int vocab_id = parseToInt(request.getParameter("vocab_id"), -1 );
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+		System.out.println("vocab_id = " + vocab_id);
+		System.out.println("pageNo = " + pageNo);
+		
+		String actionStatus;
+		boolean isScf = false;
+		Response resp = VocabService.delete(vocab_id);
+		actionStatus = resp.getResponse_description();
+		isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoVocabMng(request, response, pageNo);
