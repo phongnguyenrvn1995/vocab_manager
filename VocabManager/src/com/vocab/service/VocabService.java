@@ -23,6 +23,7 @@ public class VocabService {
 //		System.out.println(gets("en 1", "", "").size());
 //		System.out.println(getsCount("en ", "", ""));
 		Vocab vocab = new Vocab();
+		vocab.setVocab_id(112);
 		vocab.setVocab_en("en");
 		vocab.setVocab_ipa("ipa");
 		vocab.setVocab_vi("vi");
@@ -30,7 +31,7 @@ public class VocabService {
 		vocab.setVocab_type(2);
 		vocab.setVocab_sound_url("url");
 		vocab.setVocab_description("desc");
-		save(vocab);
+		update(vocab);
 	}
 
 	public static int getsCount(String q, String typeID, String lessonID){
@@ -79,6 +80,29 @@ public class VocabService {
 		String method = HttpMethod.PUT;
 		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
 		String msg = "vocab_type=" + vocab.getVocab_type() +
+				"&vocab_lesson=" + vocab.getVocab_lesson() +
+				"&vocab_en=" + vocab.getVocab_en() +
+				"&vocab_ipa=" + vocab.getVocab_ipa() + 
+				"&vocab_vi=" + vocab.getVocab_vi() + 
+				"&vocab_description=" + vocab.getVocab_description() +
+				"&vocab_sound_url=" +vocab.getVocab_sound_url();
+		
+		
+		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+				
+		Response response = new Gson().fromJson(json, Response.class);
+		System.out.println(response.getResponse_description());
+		return response;
+	}
+	
+
+	public static Response update(Vocab vocab){
+		String url = APIConsts.BASE_URL + APIConsts.API_VOCAB_UPDATE;
+		String method = HttpMethod.POST;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "&vocab_id=" + vocab.getVocab_id() +
+				"&vocab_type=" + vocab.getVocab_type() +
 				"&vocab_lesson=" + vocab.getVocab_lesson() +
 				"&vocab_en=" + vocab.getVocab_en() +
 				"&vocab_ipa=" + vocab.getVocab_ipa() + 

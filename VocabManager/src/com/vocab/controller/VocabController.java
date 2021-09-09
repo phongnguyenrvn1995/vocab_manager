@@ -65,7 +65,7 @@ public class VocabController extends HttpServlet {
 			save(request, response);
 			break;
 		case "update":
-//			update(request, response);
+			update(request, response);
 			break;
 		case "delete":
 //			delete(request, response);
@@ -175,6 +175,73 @@ public class VocabController extends HttpServlet {
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
 		gotoVocabMng(request, response, Integer.MAX_VALUE);
+	}
+	
+
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String vocab_id = request.getParameter("vocab_id");
+		String vocab_type = request.getParameter("vocab_type");
+		String vocab_lesson = request.getParameter("vocab_lesson");
+		String vocab_en = request.getParameter("vocab_en");
+		String vocab_ipa = request.getParameter("vocab_ipa");
+		String vocab_vi = request.getParameter("vocab_vi");
+		String vocab_description = request.getParameter("vocab_description");
+		String vocab_sound_url = request.getParameter("vocab_sound_url");		
+		int pageNo = parseToInt(request.getParameter("page"), 1);
+
+		System.out.println("vocab_id"            + " " + vocab_id           );
+		System.out.println("vocab_type"          + " " + vocab_type         );
+		System.out.println("vocab_lesson"        + " " + vocab_lesson       );
+		System.out.println("vocab_en"            + " " + vocab_en           );
+		System.out.println("vocab_ipa"           + " " + vocab_ipa          );
+		System.out.println("vocab_vi"            + " " + vocab_vi           );
+		System.out.println("vocab_description"   + " " + vocab_description  );
+		System.out.println("vocab_sound_url"     + " " + vocab_sound_url    );
+		System.out.println(pageNo);
+
+		String actionStatus = "";
+		boolean isScf = false;
+		if (vocab_type != null && !vocab_type.isEmpty()
+				&& vocab_lesson != null && !vocab_lesson.isEmpty()
+						&& vocab_en != null && !vocab_en.isEmpty()
+								&& vocab_ipa != null && !vocab_ipa.isEmpty()
+										&& vocab_vi != null && !vocab_vi.isEmpty()
+												&& vocab_description != null && !vocab_description.isEmpty()
+														&& vocab_sound_url != null && !vocab_sound_url.isEmpty()) {
+
+			
+			Vocab vocab = new Vocab();
+			vocab.setVocab_id(parseToInt(vocab_id, -1));
+			vocab.setVocab_type(parseToInt(vocab_type, -1));
+			vocab.setVocab_lesson(parseToInt(vocab_lesson, -1));
+			vocab.setVocab_en(vocab_en);
+			vocab.setVocab_ipa(vocab_ipa);
+			vocab.setVocab_vi(vocab_vi);
+			vocab.setVocab_description(vocab_description);
+			vocab.setVocab_sound_url(vocab_sound_url);
+
+			Response resp = VocabService.update(vocab);
+			actionStatus = resp.getResponse_description();
+			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+		} else {
+			if (vocab_type == null || vocab_type.isEmpty())
+				actionStatus = "Type id must be not empty!";
+			else if (vocab_lesson == null || vocab_lesson.isEmpty())
+				actionStatus = "Lesson id must be not empty!";
+			else if (vocab_en == null || vocab_en.isEmpty())
+				actionStatus = "ENG must be not empty!";
+			else if (vocab_ipa == null || vocab_ipa.isEmpty())
+				actionStatus = "IPA must be not empty!";
+			else if (vocab_vi == null || vocab_vi.isEmpty())
+				actionStatus = "VI must be not empty!";
+			else if (vocab_description == null || vocab_description.isEmpty())
+				actionStatus = "Description must be not empty!";
+			else if (vocab_sound_url == null || vocab_sound_url.isEmpty())
+				actionStatus = "Sound URL must be not empty!";
+		}
+		request.setAttribute("is_successful", isScf);
+		request.setAttribute("action_status", actionStatus);
+		gotoVocabMng(request, response, pageNo);
 	}
 	
 	public static int parseToInt(String stringToParse, int defaultValue) {
