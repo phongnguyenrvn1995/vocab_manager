@@ -12,6 +12,13 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	<context-param> 
+      <description>Location to store uploaded file</description> 
+      <param-name>file-upload</param-name> 
+      <param-value>
+         C:\xampp\tomcat\apache-tomcat-9\apache-tomcat-9.0.46\webapps\VocabManager\data\sounds\
+      </param-value> 
+   </context-param>
 	<filter>
 		<filter-name>CharacterSetFilter</filter-name>
 		<filter-class>com.vocab.utils.CharacterSetFilter</filter-class>

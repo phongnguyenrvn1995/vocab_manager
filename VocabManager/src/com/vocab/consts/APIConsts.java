@@ -36,4 +36,9 @@ public class APIConsts {
 	public static final String KEY_STATUS_ID = "statusID=";
 	public static final String KEY_LESSON_ID = "lessonID=";
 	public static final String KEY_TYPE_ID = "typeID=";
+	
+	
+
+	public static final String SOUND_DIR = "/data/sounds/";
+
 }

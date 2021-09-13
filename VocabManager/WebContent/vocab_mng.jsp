@@ -324,7 +324,7 @@
 					<fmt:message key="vocab.header_add_new_vocab" />
 				</h2>
 			</header>
-			<form id="add_form" class="w3-container">
+			<form id="add_form" enctype = "multipart/form-data" class="w3-container">
 				<input type="hidden" name="_action"> 
 				<input type="hidden" name="q"> 
 				<div class="w3-row w3-margin-top">
@@ -405,7 +405,7 @@
 				<div class="w3-row">
 					<input name="vocab_sound_url"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="file" maxlength=20 >
 				</div>
 			</form>
 			<footer class="w3-container w3-padding-16">
