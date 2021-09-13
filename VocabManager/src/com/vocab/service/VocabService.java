@@ -20,6 +20,7 @@ public class VocabService {
 
 	public static void main(String[] ar) {
 		System.out.println("OK");
+		get(100);
 //		System.out.println(gets("en 1", "", "").size());
 //		System.out.println(getsCount("en ", "", ""));
 //		Vocab vocab = new Vocab();
@@ -33,6 +34,20 @@ public class VocabService {
 //		vocab.setVocab_description("desc");
 //		update(vocab);
 //		delete(102);
+	}
+	
+	public static Vocab get(int id){
+		String url = APIConsts.BASE_URL + APIConsts.API_VOCAB_GET + id;
+		
+		
+		String method = HttpMethod.GET;
+		String contentType = MediaType.APPLICATION_FORM_URLENCODED;
+		String msg = "";
+		String json = HttpUtils.request(url, method, contentType, msg);
+		System.out.println(json);
+		
+		Vocab list = new Gson().fromJson(json, Vocab.class);
+		return list;
 	}
 
 	public static int getsCount(String q, String typeID, String lessonID){

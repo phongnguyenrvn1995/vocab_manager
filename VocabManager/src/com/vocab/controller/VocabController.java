@@ -92,7 +92,7 @@ public class VocabController extends HttpServlet {
 //			save(request, response);
 			break;
 		case "update":
-			update(request, response);
+//			update(request, response);
 			break;
 		case "delete":
 			delete(request, response);
@@ -125,6 +125,45 @@ public class VocabController extends HttpServlet {
 		if (countItems != 0) {
 			int total_page = (int) Math.ceil((float) countItems / (float) itemLimited);
 			int pageNo = page.length == 0 ? parseToInt(request.getParameter("page"), 1) : page[0];
+			pageNo = pageNo > total_page ? total_page : pageNo;
+
+			int offset = pageNo * itemLimited - itemLimited;
+			offset = offset >= 0 ? offset : 0;
+
+			List<Vocab> list = VocabService.gets(q, vt_id, lesson_id, itemLimited, offset);
+			request.setAttribute("list", list);
+			request.setAttribute("page", pageNo);
+			request.setAttribute("total_page", total_page);
+		}
+
+		request.setAttribute("lessons", lessons);
+		request.setAttribute("vocab_types", vocabTypes);
+		request.getRequestDispatcher("/vocab_mng.jsp").forward(request, response);
+	}
+	
+
+	private void gotoVocabMng4MultiPart(HttpServletRequest request, HttpServletResponse response, List<FileItem> fileItems,  int... page)
+			throws ServletException, IOException {
+		String q = getFieldDataMultiPartForm(fileItems, "q");
+		request.setAttribute("q", q);
+		q = q == null ? "" : q;
+		
+		String vt_id = getFieldDataMultiPartForm(fileItems, "vt_id");
+		request.setAttribute("vt_id", vt_id);
+		vt_id = vt_id == null ? "" : vt_id;
+		
+		String lesson_id = getFieldDataMultiPartForm(fileItems, "lesson_id");
+		request.setAttribute("lesson_id", lesson_id);
+		lesson_id = lesson_id == null ? "" : lesson_id;
+
+		
+		int countItems = VocabService.getsCount(q, vt_id, lesson_id);
+		List<Lesson> lessons = LessonService.gets("", "", "");
+		List<VocabType> vocabTypes = VTypeService.gets("");
+		
+		if (countItems != 0) {
+			int total_page = (int) Math.ceil((float) countItems / (float) itemLimited);
+			int pageNo = page.length == 0 ? parseToInt(getFieldDataMultiPartForm(fileItems, "page"), 1) : page[0];
 			pageNo = pageNo > total_page ? total_page : pageNo;
 
 			int offset = pageNo * itemLimited - itemLimited;
@@ -221,20 +260,21 @@ public class VocabController extends HttpServlet {
 		}
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
-		gotoVocabMng(request, response, Integer.MAX_VALUE);
+		gotoVocabMng4MultiPart(request, response, fileItems, Integer.MAX_VALUE);
 	}
 	
 
-	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String vocab_id = request.getParameter("vocab_id");
-		String vocab_type = request.getParameter("vocab_type");
-		String vocab_lesson = request.getParameter("vocab_lesson");
-		String vocab_en = request.getParameter("vocab_en");
-		String vocab_ipa = request.getParameter("vocab_ipa");
-		String vocab_vi = request.getParameter("vocab_vi");
-		String vocab_description = request.getParameter("vocab_description");
-		String vocab_sound_url = request.getParameter("vocab_sound_url");		
-		int pageNo = parseToInt(request.getParameter("page"), 1);
+	private void update(HttpServletRequest request, HttpServletResponse response, List<FileItem> fileItems) throws ServletException, IOException {
+		String vocab_id = getFieldDataMultiPartForm(fileItems, "vocab_id");
+		String vocab_type = getFieldDataMultiPartForm(fileItems, "vocab_type");
+		String vocab_lesson = getFieldDataMultiPartForm(fileItems, "vocab_lesson");
+		String vocab_en = getFieldDataMultiPartForm(fileItems, "vocab_en");
+		String vocab_ipa = getFieldDataMultiPartForm(fileItems, "vocab_ipa");
+		String vocab_vi = getFieldDataMultiPartForm(fileItems, "vocab_vi");
+		String vocab_description = getFieldDataMultiPartForm(fileItems, "vocab_description");
+//		String vocab_sound_url = getFieldDataMultiPartForm(fileItems, "vocab_sound_url");
+		FileItem soundFile = getFileItemMultiPartForm(fileItems, "vocab_sound_url");	
+		int pageNo = parseToInt(getFieldDataMultiPartForm(fileItems, "page"), 1);
 
 		System.out.println("vocab_id"            + " " + vocab_id           );
 		System.out.println("vocab_type"          + " " + vocab_type         );
@@ -243,7 +283,7 @@ public class VocabController extends HttpServlet {
 		System.out.println("vocab_ipa"           + " " + vocab_ipa          );
 		System.out.println("vocab_vi"            + " " + vocab_vi           );
 		System.out.println("vocab_description"   + " " + vocab_description  );
-		System.out.println("vocab_sound_url"     + " " + vocab_sound_url    );
+//		System.out.println("vocab_sound_url"     + " " + vocab_sound_url    );
 		System.out.println(pageNo);
 
 		String actionStatus = "";
@@ -254,22 +294,53 @@ public class VocabController extends HttpServlet {
 								&& vocab_ipa != null && !vocab_ipa.isEmpty()
 										&& vocab_vi != null && !vocab_vi.isEmpty()
 												&& vocab_description != null && !vocab_description.isEmpty()
-														&& vocab_sound_url != null && !vocab_sound_url.isEmpty()) {
+//														&& soundFile != null && isAudioFile(soundFile)
+//														&& vocab_sound_url != null && !vocab_sound_url.isEmpty()
+														) {
+			if(soundFile != null && isAudioFile(soundFile)) {
+				String soundFileName = new Date().getTime() + "_" + soundFile.getName();
+				// Write the file
+	            if( soundFileName.lastIndexOf("\\") >= 0 ) {
+	               file = new File( filePath + soundFileName.substring( soundFileName.lastIndexOf("\\"))) ;
+	            } else {
+	               file = new File( filePath + soundFileName.substring(soundFileName.lastIndexOf("\\")+1)) ;
+	            }
+	            try {
+					soundFile.write( file ) ;
+					Vocab vocab = VocabService.get(parseToInt(vocab_id, -1));
+					vocab.setVocab_id(parseToInt(vocab_id, -1));
+					vocab.setVocab_type(parseToInt(vocab_type, -1));
+					vocab.setVocab_lesson(parseToInt(vocab_lesson, -1));
+					vocab.setVocab_en(vocab_en);
+					vocab.setVocab_ipa(vocab_ipa);
+					vocab.setVocab_vi(vocab_vi);
+					vocab.setVocab_description(vocab_description);
+					vocab.setVocab_sound_url(APIConsts.SOUND_DIR + soundFileName);
 
+					Response resp = VocabService.update(vocab);
+					actionStatus = resp.getResponse_description();
+					isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					actionStatus = "Upload audio file failed, pls try again!";
+				}
+			} else {		
 			
-			Vocab vocab = new Vocab();
-			vocab.setVocab_id(parseToInt(vocab_id, -1));
-			vocab.setVocab_type(parseToInt(vocab_type, -1));
-			vocab.setVocab_lesson(parseToInt(vocab_lesson, -1));
-			vocab.setVocab_en(vocab_en);
-			vocab.setVocab_ipa(vocab_ipa);
-			vocab.setVocab_vi(vocab_vi);
-			vocab.setVocab_description(vocab_description);
-			vocab.setVocab_sound_url(vocab_sound_url);
-
-			Response resp = VocabService.update(vocab);
-			actionStatus = resp.getResponse_description();
-			isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+				Vocab vocab = VocabService.get(parseToInt(vocab_id, -1));
+				vocab.setVocab_id(parseToInt(vocab_id, -1));
+				vocab.setVocab_type(parseToInt(vocab_type, -1));
+				vocab.setVocab_lesson(parseToInt(vocab_lesson, -1));
+				vocab.setVocab_en(vocab_en);
+				vocab.setVocab_ipa(vocab_ipa);
+				vocab.setVocab_vi(vocab_vi);
+				vocab.setVocab_description(vocab_description);
+	//			vocab.setVocab_sound_url(vocab_sound_url);
+	
+				Response resp = VocabService.update(vocab);
+				actionStatus = resp.getResponse_description();
+				isScf = resp.getResponse_id() == ResponseConst.SUCCESS;
+			}
 		} else {
 			if (vocab_type == null || vocab_type.isEmpty())
 				actionStatus = "Type id must be not empty!";
@@ -283,12 +354,10 @@ public class VocabController extends HttpServlet {
 				actionStatus = "VI must be not empty!";
 			else if (vocab_description == null || vocab_description.isEmpty())
 				actionStatus = "Description must be not empty!";
-			else if (vocab_sound_url == null || vocab_sound_url.isEmpty())
-				actionStatus = "Sound URL must be not empty!";
 		}
 		request.setAttribute("is_successful", isScf);
 		request.setAttribute("action_status", actionStatus);
-		gotoVocabMng(request, response, pageNo);
+		gotoVocabMng4MultiPart(request, response, fileItems, pageNo);
 	}
 
 	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -331,7 +400,7 @@ public class VocabController extends HttpServlet {
 				save(request, response, fileItems);
 				break;
 			case "update":
-				update(request, response);
+				update(request, response, fileItems);
 				break;
 			case "delete":
 				delete(request, response);

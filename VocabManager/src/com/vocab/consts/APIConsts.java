@@ -25,6 +25,7 @@ public class APIConsts {
 	
 
 	public static final String API_VOCAB_GETS = "/VocabRestApi/vocab_api/vocab/get_filter";
+	public static final String API_VOCAB_GET = "/VocabRestApi/vocab_api/vocab/get/";
 	public static final String API_VOCAB_GETS_COUNT = "/VocabRestApi/vocab_api/vocab/get_filter_count";
 	public static final String API_VOCAB_SAVE = "/VocabRestApi/vocab_api/vocab/save";
 	public static final String API_VOCAB_UPDATE = "/VocabRestApi/vocab_api/vocab/update";
