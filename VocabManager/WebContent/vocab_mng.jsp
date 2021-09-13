@@ -270,7 +270,14 @@
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_ipa() }" /></td>
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_vi() }" /></td>
 						<td style="vertical-align: middle;"><c:out value="${item.getVocab_description() }" /></td>
-						<td style="vertical-align: middle;"><c:out value="${item.getVocab_sound_url() }" /></td>
+						<td style="vertical-align: middle;">
+							<audio id="audio_${item.getVocab_id() }">
+								<source src="./${item.getVocab_sound_url() }">
+							</audio>							
+  							<button onclick="document.getElementById('audio_${item.getVocab_id() }').play()">
+  								<img alt="Play" style="height: 40px" src="images/audio_img.png">
+  							</button> 
+						</td>
 						<td class="w3-row" style="vertical-align: middle;">
 							<button
 								onclick="openUpdateModal('${item.getVocab_id() }', '${item.getVocab_type()}', '${item.getVocab_lesson()}',
