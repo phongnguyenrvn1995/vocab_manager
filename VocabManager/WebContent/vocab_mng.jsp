@@ -342,7 +342,7 @@
 				<div class="w3-row">
 					<input name="vocab_en"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
@@ -353,7 +353,7 @@
 				<div class="w3-row">
 					<input name="vocab_vi"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
@@ -377,7 +377,7 @@
 				<div class="w3-row">
 					<input name="vocab_ipa"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
@@ -464,7 +464,7 @@
 				<div class="w3-row">
 					<input name="vocab_en"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
@@ -475,7 +475,7 @@
 				<div class="w3-row">
 					<input name="vocab_vi"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
@@ -499,7 +499,7 @@
 				<div class="w3-row">
 					<input name="vocab_ipa"
 						class="w3-input w3-border w3-light-grey w3-rest"
-						type="text" maxlength=20 >
+						type="text" maxlength=50 >
 				</div>
 				
 				<div class="w3-row w3-margin-top">
