@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_course"
+        android:icon="@drawable/ic_course"
+        android:title="@string/title_course" />
+
+    <item
+        android:id="@+id/navigation_lesson"
+        android:icon="@drawable/ic_lesson"
+        android:title="@string/title_lesson" />
+
+    <item
+        android:id="@+id/navigation_vocab"
+        android:icon="@drawable/ic_vocab"
+        android:title="@string/title_vocab" />
+
+    <item
+        android:id="@+id/navigation_pos"
+        android:icon="@drawable/ic_parts_of_speech"
+        android:title="@string/title_pos" />
+
+</menu>

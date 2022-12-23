@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_course">
+
+    <fragment
+        android:id="@+id/navigation_course"
+        android:name="com.example.vocabmanager.ui.CourseFragment"
+        android:label="@string/title_course"
+        tools:layout="@layout/fragment_course" />
+
+    <fragment
+        android:id="@+id/navigation_lesson"
+        android:name="com.example.vocabmanager.ui.LessonFragment"
+        android:label="@string/title_lesson"
+        tools:layout="@layout/fragment_lesson" />
+
+    <fragment
+        android:id="@+id/navigation_vocab"
+        android:name="com.example.vocabmanager.ui.VocabFragment"
+        android:label="@string/title_vocab"
+        tools:layout="@layout/fragment_vocab" />
+
+    <fragment
+        android:id="@+id/navigation_pos"
+        android:name="com.example.vocabmanager.ui.PoSFragment"
+        android:label="@string/title_pos"
+        tools:layout="@layout/fragment_pos" />
+</navigation>
